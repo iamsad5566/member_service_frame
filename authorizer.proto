@@ -1,0 +1,14 @@
+syntax = "proto3";
+option go_package = "pkg/grpc";
+package authorizer;
+
+service Authorizer {
+    rpc AuthorizeByToken(AuthorizeToken) returns (AuthorizeResponse);
+}
+
+message AuthorizeToken {
+}
+
+message AuthorizeResponse {
+    bool res = 1;
+}
