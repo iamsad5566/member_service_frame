@@ -1,6 +1,7 @@
 package main
 
 import (
+	"member_service_frame/config"
 	"net/http"
 	"os"
 	"time"
@@ -15,7 +16,8 @@ const dbName string = "Member"
 const redisPool int = 0
 
 func main() {
-
+	// setting middleWare
+	var server *gin.Engine = config.GetEngineWithMiddleWare()
 }
 
 func testerURL(ctx *gin.Context) {
