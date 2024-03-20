@@ -10,4 +10,4 @@ func NewUserRepository(client PsqlClientInterface) *PsqlUserRepository {
 	return &PsqlUserRepository{client: client}
 }
 
-var _ repo.UserRepository = (*PsqlUserRepository)(nil)
+var _ repo.UserRepoInterface = (*PsqlUserRepository)(nil)

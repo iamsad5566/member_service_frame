@@ -18,6 +18,7 @@ const redisPool int = 0
 func main() {
 	// setting middleWare
 	var server *gin.Engine = config.GetEngineWithMiddleWare()
+
 }
 
 func testerURL(ctx *gin.Context) {

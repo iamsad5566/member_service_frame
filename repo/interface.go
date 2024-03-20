@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type UserRepository interface {
+type UserRepoInterface interface {
 	Register(usr *object.User) bool
 	GetPassword(usr *object.User) (string, error)
 	UpdateLastLogin(usr *object.User) error
