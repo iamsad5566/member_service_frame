@@ -1,7 +1,10 @@
 package main
 
 import (
+	"database/sql"
 	"member_service_frame/config"
+	"member_service_frame/repo"
+	"member_service_frame/repo/psql"
 	"net/http"
 	"os"
 	"time"
@@ -18,10 +21,15 @@ const redisPool int = 0
 func main() {
 	// setting middleWare
 	var server *gin.Engine = config.GetEngineWithMiddleWare()
+	var psqldb *sql.DB = repo.GetConnecter(dbName)
+	var userRepo *psql.PsqlUserRepository = psql.NewUserRepository(psqldb)
+	defer psqldb.Close()
 
+	server.GET("/health", healthCheck)
+	server.NoRoute(handleNoRoute)
 }
 
-func testerURL(ctx *gin.Context) {
+func healthCheck(ctx *gin.Context) {
 	hostName, _ := os.Hostname()
 	ctx.JSON(http.StatusOK, gin.H{
 		"Deployment Time": deployTime,
