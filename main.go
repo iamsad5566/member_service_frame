@@ -1,16 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"member_service_frame/config"
-	"net"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/redis/go-redis"
-	"google.golang.org/grpc"
 )
 
 var deployTime string = time.Now().UTC().Format("2006-01-02 15:04:05") + " UTC"
@@ -39,18 +35,18 @@ func handleNoRoute(ctx *gin.Context) {
 }
 
 func openGRPCService(grpcPort string) {
-	var redisClient *redis.Client = r.Connect(redisPool)
-	var loginRepo repository.LoginTimeInterface = redisLogincheck.NewRedisLoginCheckerRepository(redisClient)
+	// var redisClient *redis.Client = r.Connect(redisPool)
+	// var loginRepo repository.LoginTimeInterface = redisLogincheck.NewRedisLoginCheckerRepository(redisClient)
 
-	lis, err := net.Listen("tcp", grpcPort)
-	if err != nil {
-		logger.HandleSevereCrashed(err)
-		return
-	}
-	s := grpc.NewServer()
-	pb.RegisterAuthorizerServer(s, &controller.Server{RedisClient: loginRepo})
-	fmt.Printf("gRPC Server is listening on port %v \n", grpcPort)
-	if err := s.Serve(lis); err != nil {
-		fmt.Printf("Failed to serve: %v\n", err)
-	}
+	// lis, err := net.Listen("tcp", grpcPort)
+	// if err != nil {
+	// 	logger.HandleSevereCrashed(err)
+	// 	return
+	// }
+	// s := grpc.NewServer()
+	// pb.RegisterAuthorizerServer(s, &controller.Server{RedisClient: loginRepo})
+	// fmt.Printf("gRPC Server is listening on port %v \n", grpcPort)
+	// if err := s.Serve(lis); err != nil {
+	// 	fmt.Printf("Failed to serve: %v\n", err)
+	// }
 }
