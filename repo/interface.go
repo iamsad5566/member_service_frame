@@ -9,7 +9,7 @@ import (
 type UserRepoInterface interface {
 	Register(usr *object.User) (bool, error)
 	GetPassword(usr *object.User) (string, error)
-	UpdateLastLogin(usr *object.User) (bool, error)
+	UpdateLastTimeLogin(usr *object.User) (bool, error)
 	UpdatePassword(usr *object.User) (bool, error)
 	DeleteAccount(usr *object.User) (bool, error)
 	CheckExistsID(usr *object.User) (bool, error)
