@@ -7,12 +7,12 @@ import (
 )
 
 type UserRepoInterface interface {
-	Register(usr *object.User) bool
+	Register(usr *object.User) (bool, error)
 	GetPassword(usr *object.User) (string, error)
-	UpdateLastLogin(usr *object.User) error
-	UpdatePassword(usr *object.User) bool
-	DeleteAccount(usr *object.User) bool
-	CheckExistsID(usr *object.User) bool
+	UpdateLastLogin(usr *object.User) (bool, error)
+	UpdatePassword(usr *object.User) (bool, error)
+	DeleteAccount(usr *object.User) (bool, error)
+	CheckExistsID(usr *object.User) (bool, error)
 }
 
 type LoginTimeInterface interface {
