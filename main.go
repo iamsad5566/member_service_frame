@@ -21,7 +21,7 @@ const redisPool int = 0
 func main() {
 	// setting middleWare
 	var server *gin.Engine = config.GetEngineWithMiddleWare()
-	var psqldb *sql.DB = repo.GetConnecter(dbName)
+	var psqldb *sql.DB = repo.GetPSQLConnecter(dbName)
 	var userRepo *psql.PsqlUserRepository = psql.NewUserRepository(psqldb)
 	defer psqldb.Close()
 

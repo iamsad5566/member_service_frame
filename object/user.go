@@ -26,12 +26,4 @@ func (user *User) ToDAO() {
 	}
 	user.Password = encrypted
 	user.UserID = uuid.New().String()
-
-	// if user.NewPassword != "" {
-	// 	encrypted, err = security.Encrypter(user.NewPassword)
-	// 	if err != nil {
-	// 		log.Panic(err)
-	// 	}
-	// 	user.NewPassword = encrypted
-	// }
 }

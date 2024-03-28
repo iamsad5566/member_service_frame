@@ -30,7 +30,13 @@ func newPsqlConfig() *psqlConfig {
 	return psqlSetting
 }
 
-func GetConnecter(dbName string) *sql.DB {
+// GetPSQLConnecter returns a *sql.DB object for connecting to a PostgreSQL database.
+// It takes the name of the database as a parameter and returns the database connection object.
+// The function uses the provided database name to construct the connection string and establish a connection.
+// If an error occurs during the connection process, the function will log the error and terminate the program.
+// The function also sets the maximum number of idle connections, maximum number of open connections,
+// and maximum connection lifetime based on the configuration settings.
+func GetPSQLConnecter(dbName string) *sql.DB {
 	var psqlSetting *psqlConfig = newPsqlConfig()
 	var psqlInfo string = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		psqlSetting.host, psqlSetting.port, psqlSetting.account, psqlSetting.password, dbName)
