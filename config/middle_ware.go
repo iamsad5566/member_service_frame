@@ -26,7 +26,7 @@ func GetEngineWithMiddleWare() *gin.Engine {
 	server.HandleMethodNotAllowed = true
 	server.Use(gin.Recovery())
 	server.Use(gin.Logger())
-	server.Use(cors())
+	server.Use(Cors())
 	setLoggers(server)
 	return server
 }
@@ -43,7 +43,7 @@ func setMod() {
 	}
 }
 
-func cors() gin.HandlerFunc {
+func Cors() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		method := ctx.Request.Method
 		ctx.Header("Access-Control-Allow-Origin", "*")
