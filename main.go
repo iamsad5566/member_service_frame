@@ -16,7 +16,7 @@ import (
 	r "member_service_frame/repo/redis"
 )
 
-var deployTime string = time.Now().UTC().Format("2006-01-02 15:04:05") + " UTC"
+var deployTime string = time.Now().UTC().Format(time.RFC3339)
 
 const version string = "1.0.0"
 const dbName string = "Member"
@@ -32,7 +32,7 @@ func main() {
 	var loginTimeRepo *r.RedisLoginCheckRepository = r.NewLoginCheckRepository(reddisdb)
 	defer psqldb.Close()
 
-	server.GET("/health", healthCheck)
+	server.GET("/health_check", healthCheck)
 	server.NoRoute(handleNoRoute)
 
 	controller.MemberServiceGroup(server, userRepo, loginTimeRepo)

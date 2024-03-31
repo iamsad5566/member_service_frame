@@ -7,16 +7,18 @@ import (
 	"log"
 	"member_service_frame/config"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 type psqlConfig struct {
-	account        string
-	password       string
-	host           string
-	port           int
-	maxIdleConns   int
-	maxOpenConns   int
-	maxLifeMinutes time.Duration
+	Account        string        `json:"account"`
+	Password       string        `json:"password"`
+	Host           string        `json:"host"`
+	Port           int           `json:"port"`
+	MaxIdleConns   int           `json:"maxIdleConns"`
+	MaxOpenConns   int           `json:"maxOpenConns"`
+	MaxLifeMinutes time.Duration `json:"maxLifeMinute"`
 }
 
 func newPsqlConfig() *psqlConfig {
@@ -39,18 +41,45 @@ func newPsqlConfig() *psqlConfig {
 func GetPSQLConnecter(dbName string) *sql.DB {
 	var psqlSetting *psqlConfig = newPsqlConfig()
 	var psqlInfo string = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		psqlSetting.host, psqlSetting.port, psqlSetting.account, psqlSetting.password, dbName)
+		psqlSetting.Host, psqlSetting.Port, psqlSetting.Account, psqlSetting.Password, dbName)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	err = db.Ping()
+	if err != nil {
+		if err.Error() == fmt.Sprintf("pq: database \"%s\" does not exist", dbName) {
+			fmt.Println("Database does not exist. Creating database...")
+			createDB(dbName)
+		} else {
+			log.Fatal(err)
+		}
+	}
+
+	db.SetMaxIdleConns(psqlSetting.MaxIdleConns)
+	db.SetMaxOpenConns(psqlSetting.MaxOpenConns)
+	db.SetConnMaxLifetime(time.Minute * psqlSetting.MaxLifeMinutes)
+
+	return db
+}
+
+func createDB(dbName string) {
+	var psqlSetting *psqlConfig = newPsqlConfig()
+	var defaultPsqlInfo string = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=postgres sslmode=disable",
+		psqlSetting.Host, psqlSetting.Port, psqlSetting.Account, psqlSetting.Password)
+	db, err := sql.Open("postgres", defaultPsqlInfo)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	err = db.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
-	db.SetMaxIdleConns(psqlSetting.maxIdleConns)
-	db.SetMaxOpenConns(psqlSetting.maxOpenConns)
-	db.SetConnMaxLifetime(time.Minute * psqlSetting.maxLifeMinutes)
 
-	return db
+	_, err = db.Exec(fmt.Sprintf("CREATE DATABASE %s WITH OWNER %s", dbName, psqlSetting.Account))
+	if err != nil {
+		log.Fatal(err)
+	}
 }
