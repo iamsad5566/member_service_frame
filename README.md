@@ -1,5 +1,9 @@
 # Application Overview
 This backend application provides a comprehensive member service system with both RESTful APIs and a gRPC service. It supports functionalities like user registration, login, password update, and user existence verification. The application also automates the creation of the necessary PostgreSQL database and includes a gRPC service for token-based authorization.
+- [Features](#features)
+- [gRPC Service](#grpc-service)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
 
 ## Features
 - **Automatic Database Creation:** Automatically creates the specified PostgreSQL database if it doesn't exist.
