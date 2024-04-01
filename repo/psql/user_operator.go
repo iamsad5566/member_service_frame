@@ -19,7 +19,7 @@ func (pq *PsqlUserRepository) Register(usr *object.User) (bool, error) {
 		return false, err
 	}
 
-	var sqlQuery string = `INSERT INTO member (user_id, account, password, gender, birth_day, last_login) 
+	var sqlQuery string = `INSERT INTO member (user_id, account, password, gender, birth_day, last_time_login) 
 		VALUES ($1, $2, $3, $4, $5, $6)`
 
 	// Prepare the SQL query for inserting a new user
@@ -63,7 +63,7 @@ func (pq *PsqlUserRepository) GetPassword(usr *object.User) (string, error) {
 // It takes a pointer to a User object and returns a boolean indicating whether the update was successful,
 // and an error if any occurred.
 func (pq *PsqlUserRepository) UpdateLastTimeLogin(usr *object.User) (bool, error) {
-	var sqlQuery string = `UPDATE member SET last_login = $1 WHERE account = $2`
+	var sqlQuery string = `UPDATE member SET last_time_login = $1 WHERE account = $2`
 	stmt, err := pq.client.Prepare(sqlQuery)
 	if err != nil {
 		return false, err
@@ -109,4 +109,19 @@ func (pq *PsqlUserRepository) CheckExistsID(usr *object.User) (bool, error) {
 	row := pq.client.QueryRow(sqlQuery, usr.UserID)
 	row.Scan(&exists)
 	return exists, nil
+}
+
+func (pq *PsqlUserRepository) CreateTable() (bool, error) {
+	var sqlQuery string = `CREATE TABLE IF NOT EXISTS member (
+		user_id         integer     NOT NULL,
+		account         varchar(30) NOT NULL,
+		password        varchar(50) NOT NULL,
+		gender          text,
+		birthday        date,
+		last_time_login date,
+		CONSTRAINT pk
+        PRIMARY KEY (user_id, account)
+	)`
+	_, err := pq.client.Exec(sqlQuery)
+	return err == nil, err
 }

@@ -75,7 +75,7 @@ func TestUpdateLastTimeLogin(t *testing.T) {
 	}
 	defer db.Close()
 
-	mock.ExpectPrepare("UPDATE member SET last_login").ExpectExec().WithArgs(sqlmock.AnyArg(),
+	mock.ExpectPrepare("UPDATE member SET last_time_login").ExpectExec().WithArgs(sqlmock.AnyArg(),
 		user.Account).WillReturnResult(sqlmock.NewResult(1, 1))
 	pq := psql.NewUserRepository(db)
 	success, err := pq.UpdateLastTimeLogin(user)
@@ -135,5 +135,29 @@ func TestExistsID(t *testing.T) {
 	pq := psql.NewUserRepository(db)
 	exists, err := pq.CheckExistsID(user)
 	assert.True(t, exists)
+	assert.Nil(t, err)
+}
+
+func TestCreateTable(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+
+	mock.ExpectExec(`CREATE TABLE IF NOT EXISTS member\s+\(` +
+		`\s+user_id\s+integer\s+NOT NULL,` +
+		`\s+account\s+varchar\(30\)\s+NOT NULL,` +
+		`\s+password\s+varchar\(50\)\s+NOT NULL,` +
+		`\s+gender\s+text,` +
+		`\s+birthday\s+date,` +
+		`\s+last_time_login\s+date,` +
+		`\s+CONSTRAINT pk` +
+		`\s+PRIMARY KEY \(user_id, account\)` +
+		`\s+\)`).WillReturnResult(sqlmock.NewResult(1, 1))
+
+	pq := psql.NewUserRepository(db)
+	success, err := pq.CreateTable()
+	assert.True(t, success)
 	assert.Nil(t, err)
 }

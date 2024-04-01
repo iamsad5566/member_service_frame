@@ -36,6 +36,7 @@ func main() {
 	server.NoRoute(handleNoRoute)
 
 	controller.MemberServiceGroup(server, userRepo, loginTimeRepo)
+	controller.CreateTable(server, userRepo)
 
 	server.Run(config.Setting.GetMemberServiceGRPCPort())
 }

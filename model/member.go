@@ -12,9 +12,9 @@ import (
 // It takes a user repository interface and a user object as parameters.
 // It converts the user object to a DAO (Data Access Object) and calls the Register method on the repository.
 // It returns a boolean indicating whether the registration was successful and an error if any.
-func AccountRegister(repo repo.UserRepoInterface, usr *object.User) (bool, error) {
+func AccountRegister(usrRepo repo.UserRepoInterface, usr *object.User) (bool, error) {
 	usr.ToDAO()
-	return repo.Register(usr)
+	return usrRepo.Register(usr)
 }
 
 // AuthenticateUser authenticates a user.

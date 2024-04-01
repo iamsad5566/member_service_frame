@@ -16,6 +16,7 @@ func MemberServiceGroup(server *gin.Engine, userRepo repo.UserRepoInterface, log
 	{
 		group.POST("/register", handler.UserChecker, registerHandler(userRepo))
 		group.POST("/login", handler.UserChecker, loginHandler(userRepo, loginTimeRepo))
+
 	}
 }
 

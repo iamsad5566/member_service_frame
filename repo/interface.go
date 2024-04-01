@@ -31,6 +31,9 @@ type UserRepoInterface interface {
 	// CheckExistsID checks if a user ID exists.
 	// It takes a pointer to a User object as input and returns a boolean indicating whether the ID exists and an error, if any.
 	CheckExistsID(usr *object.User) (bool, error)
+
+	// CreateTable creates the user table in the database.
+	CreateTable() (bool, error)
 }
 
 // LoginTimeInterface represents an interface for managing login time information.

@@ -34,10 +34,7 @@ func newPsqlConfig() *psqlConfig {
 
 // GetPSQLConnecter returns a *sql.DB object for connecting to a PostgreSQL database.
 // It takes the name of the database as a parameter and returns the database connection object.
-// The function uses the provided database name to construct the connection string and establish a connection.
-// If an error occurs during the connection process, the function will log the error and terminate the program.
-// The function also sets the maximum number of idle connections, maximum number of open connections,
-// and maximum connection lifetime based on the configuration settings.
+// If the database does not exist, it creates the database before returning the connection object.
 func GetPSQLConnecter(dbName string) *sql.DB {
 	var psqlSetting *psqlConfig = newPsqlConfig()
 	var psqlInfo string = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
@@ -77,8 +74,8 @@ func createDB(dbName string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	_, err = db.Exec(fmt.Sprintf("CREATE DATABASE %s WITH OWNER %s", dbName, psqlSetting.Account))
+	_, err = db.Exec(fmt.Sprintf("CREATE DATABASE \"%s\" WITH OWNER %s", dbName, psqlSetting.Account))
+	db.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
