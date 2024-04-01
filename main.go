@@ -40,7 +40,7 @@ func main() {
 	server.NoRoute(handleNoRoute)
 
 	controller.MemberServiceGroup(server, userRepo, loginTimeRepo)
-	controller.CreateTable(server, userRepo)
+	controller.CreateTable(server, userRepo, loginTimeRepo)
 
 	// gRPC service
 	go openGRPCService(config.Setting.GetMemberServiceGRPCPort(), loginTimeRepo)

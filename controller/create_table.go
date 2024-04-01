@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"member_service_frame/handler"
 	"member_service_frame/model"
 	"member_service_frame/repo"
 	"net/http"
@@ -8,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateTable(server *gin.Engine, userRepo repo.UserRepoInterface) {
-	server.POST("/create_table", createTableHandler(userRepo))
+func CreateTable(server *gin.Engine, userRepo repo.UserRepoInterface, loginTimeRepo repo.LoginTimeInterface) {
+	server.POST("/create_table", handler.TokenChecker(loginTimeRepo), createTableHandler(userRepo))
 }
 
 // createTableHandler is a handler function that creates a table using the provided user repository.

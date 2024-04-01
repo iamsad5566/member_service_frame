@@ -24,6 +24,7 @@ func CertifyToken(loginTimeRepo repo.LoginTimeInterface, ctx context.Context, to
 	if err != nil && err.Error() == jwt.ErrTokenExpired.Error() {
 		return TokenExpired, util.GenerateToken(object.NewUser(id, account))
 	} else if err != nil {
+		log.Println(err)
 		return WrongToken, ""
 	}
 
