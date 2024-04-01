@@ -146,9 +146,9 @@ func TestCreateTable(t *testing.T) {
 	defer db.Close()
 
 	mock.ExpectExec(`CREATE TABLE IF NOT EXISTS member\s+\(` +
-		`\s+user_id\s+integer\s+NOT NULL,` +
+		`\s+user_id\s+text\s+NOT NULL,` +
 		`\s+account\s+varchar\(30\)\s+NOT NULL,` +
-		`\s+password\s+varchar\(50\)\s+NOT NULL,` +
+		`\s+password\s+text\s+NOT NULL,` +
 		`\s+gender\s+text,` +
 		`\s+birthday\s+date,` +
 		`\s+last_time_login\s+date,` +

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"member_service_frame/object"
+	"member_service_frame/object/request"
 	"member_service_frame/repo"
 	"member_service_frame/security"
 )
@@ -38,4 +39,38 @@ func AuthenticateUser(usrRepo repo.UserRepoInterface, loginTimeRepo repo.LoginTi
 	} else {
 		return false, errors.New("password incorrect")
 	}
+}
+
+func UpdatePassword(usrRepo repo.UserRepoInterface, updatePassword *request.UpdateUserPassword) (bool, error) {
+	usr := object.User{
+		Account:  updatePassword.Account,
+		Password: updatePassword.Password,
+	}
+	if isValid, err := isValidPassword(usrRepo, &usr); !isValid {
+		return false, err
+	}
+
+	usr.Password = updatePassword.NewPassword
+	usr.ToDAO()
+	var success, err = usrRepo.UpdatePassword(&usr)
+	if err != nil {
+		return false, err
+	}
+	return success, nil
+}
+
+func isValidPassword(usrRepo repo.UserRepoInterface, usr *object.User) (bool, error) {
+	hashStr, err := usrRepo.GetPassword(usr)
+	if err != nil {
+		return false, errors.New("user not found")
+	}
+	if passwordIsCorrect := security.IsConfirmedAfterDecrypted(usr.Password, hashStr); passwordIsCorrect {
+		return true, nil
+	} else {
+		return false, errors.New("password incorrect")
+	}
+}
+
+func CheckExistsID(usrRepo repo.UserRepoInterface, usr *object.User) (bool, error) {
+	return usrRepo.CheckExistsID(usr)
 }

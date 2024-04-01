@@ -2,6 +2,7 @@ package handler
 
 import (
 	"member_service_frame/object"
+	"member_service_frame/object/request"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,4 +21,18 @@ func UserChecker(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 	}
 	ctx.Set(REQUEST_BODY, user)
+}
+
+func UpdateUserPasswordChecker(ctx *gin.Context) {
+	var updateUserPassword *request.UpdateUserPassword
+	err := ctx.ShouldBindJSON(&updateUserPassword)
+	if err != nil || updateUserPassword.Account == "" || updateUserPassword.Password == "" || updateUserPassword.NewPassword == "" {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+	}
+
+	if updateUserPassword.Password == updateUserPassword.NewPassword {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "new password cannot be the same as the old password"})
+	}
+
+	ctx.Set(REQUEST_BODY, updateUserPassword)
 }

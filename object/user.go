@@ -12,7 +12,7 @@ type User struct {
 	Account  string `json:"account"`
 	Password string `json:"password"`
 	Gender   string `json:"gender"`
-	BirthDay string `json:"birth_day"`
+	BirthDay string `json:"birthday"`
 }
 
 func NewUser(id, account string) *User {

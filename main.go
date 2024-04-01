@@ -24,7 +24,7 @@ var deployTime string = time.Now().UTC().Format(time.RFC3339)
 
 const version string = "1.0.0"
 const dbName string = "Member"
-const redisPool int = 0
+const redisPool int = 1
 
 func main() {
 	// setting middleWare

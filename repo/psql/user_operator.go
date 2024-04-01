@@ -19,7 +19,7 @@ func (pq *PsqlUserRepository) Register(usr *object.User) (bool, error) {
 		return false, err
 	}
 
-	var sqlQuery string = `INSERT INTO member (user_id, account, password, gender, birth_day, last_time_login) 
+	var sqlQuery string = `INSERT INTO member (user_id, account, password, gender, birthday, last_time_login) 
 		VALUES ($1, $2, $3, $4, $5, $6)`
 
 	// Prepare the SQL query for inserting a new user
@@ -104,18 +104,17 @@ func (pq *PsqlUserRepository) DeleteAccount(usr *object.User) (bool, error) {
 // CheckExistsID checks if a user with the given ID exists in the member table.
 // It returns a boolean indicating whether the user exists or not, and an error if any.
 func (pq *PsqlUserRepository) CheckExistsID(usr *object.User) (bool, error) {
-	var sqlQuery string = `SELECT EXISTS(SELECT 1 FROM member WHERE account = $1) AS \"exists\"`
+	var sqlQuery string = `SELECT EXISTS(SELECT 1 FROM member WHERE account = $1) AS "exists"`
 	var exists bool
-	row := pq.client.QueryRow(sqlQuery, usr.UserID)
-	row.Scan(&exists)
+	pq.client.QueryRow(sqlQuery, usr.Account).Scan(&exists)
 	return exists, nil
 }
 
 func (pq *PsqlUserRepository) CreateTable() (bool, error) {
 	var sqlQuery string = `CREATE TABLE IF NOT EXISTS member (
-		user_id         integer     NOT NULL,
+		user_id         text        NOT NULL,
 		account         varchar(30) NOT NULL,
-		password        varchar(50) NOT NULL,
+		password        text		NOT NULL,
 		gender          text,
 		birthday        date,
 		last_time_login date,
