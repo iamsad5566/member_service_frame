@@ -3,6 +3,7 @@ package controller
 import (
 	"member_service_frame/model"
 	"member_service_frame/repo"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,12 +22,12 @@ func createTableHandler(repo repo.UserRepoInterface) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var success, err = model.CreateTable(repo)
 		if err != nil {
-			ctx.JSON(500, gin.H{
+			ctx.JSON(http.StatusInternalServerError, gin.H{
 				"message": "Internal server error",
 				"content": err,
 			})
 		} else {
-			ctx.JSON(200, gin.H{
+			ctx.JSON(http.StatusOK, gin.H{
 				"message": "Success",
 				"content": success,
 			})

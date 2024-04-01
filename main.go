@@ -2,17 +2,21 @@ package main
 
 import (
 	"database/sql"
+	"log"
 	"member_service_frame/config"
 	"member_service_frame/controller"
 	"member_service_frame/repo"
 	"member_service_frame/repo/psql"
+	"net"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
+	"google.golang.org/grpc"
 
+	pb "member_service_frame/grpc"
 	r "member_service_frame/repo/redis"
 )
 
@@ -26,10 +30,10 @@ func main() {
 	// setting middleWare
 	var server *gin.Engine = config.GetEngineWithMiddleWare()
 	var psqldb *sql.DB = repo.GetPSQLConnecter(dbName)
-	var reddisdb *redis.Client = repo.GetRedisConnecter(redisPool)
+	var redisClient *redis.Client = repo.GetRedisConnecter(redisPool)
 
 	var userRepo *psql.PsqlUserRepository = psql.NewUserRepository(psqldb)
-	var loginTimeRepo *r.RedisLoginCheckRepository = r.NewLoginCheckRepository(reddisdb)
+	var loginTimeRepo *r.RedisLoginCheckRepository = r.NewLoginCheckRepository(redisClient)
 	defer psqldb.Close()
 
 	server.GET("/health_check", healthCheck)
@@ -38,7 +42,10 @@ func main() {
 	controller.MemberServiceGroup(server, userRepo, loginTimeRepo)
 	controller.CreateTable(server, userRepo)
 
-	server.Run(config.Setting.GetMemberServiceGRPCPort())
+	// gRPC service
+	go openGRPCService(config.Setting.GetMemberServiceGRPCPort(), loginTimeRepo)
+
+	server.Run(config.Setting.GetMemberServiceRESTfulPort())
 }
 
 func healthCheck(ctx *gin.Context) {
@@ -54,19 +61,15 @@ func handleNoRoute(ctx *gin.Context) {
 	ctx.File("no_route.html")
 }
 
-// func openGRPCService(grpcPort string) {
-// var redisClient *redis.Client = r.Connect(redisPool)
-// var loginRepo repository.LoginTimeInterface = redisLogincheck.NewRedisLoginCheckerRepository(redisClient)
-
-// lis, err := net.Listen("tcp", grpcPort)
-// if err != nil {
-// 	logger.HandleSevereCrashed(err)
-// 	return
-// }
-// s := grpc.NewServer()
-// pb.RegisterAuthorizerServer(s, &controller.Server{RedisClient: loginRepo})
-// fmt.Printf("gRPC Server is listening on port %v \n", grpcPort)
-// if err := s.Serve(lis); err != nil {
-// 	fmt.Printf("Failed to serve: %v\n", err)
-// }
-// }
+func openGRPCService(grpcPort string, loginTimeRepo *r.RedisLoginCheckRepository) {
+	listener, err := net.Listen("tcp", grpcPort)
+	if err != nil {
+		log.Fatal(err)
+	}
+	grpcServer := grpc.NewServer()
+	pb.RegisterAuthorizerServer(grpcServer, &controller.Server{RedisClient: loginTimeRepo})
+	log.Printf("gRPC service is running on port %s \n", grpcPort)
+	if err := grpcServer.Serve(listener); err != nil {
+		log.Fatal(err)
+	}
+}
