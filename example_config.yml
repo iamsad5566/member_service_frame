@@ -1,0 +1,44 @@
+valid_login: 14
+
+member_service:
+  host: "*******"
+  port: :888
+  RESTfulPort: :8112
+  gRPCPort: :8113
+
+restaurant_service:
+  host: "*******"
+  innerPort: :8114
+  port: :888
+
+jwt:
+  secret_key: "*******"
+  token_expire: 86400
+
+db:
+  psql:
+    account: "*******"
+    password: "*******"
+    host: "***.***.***.***"
+    port: 5433
+    maxIdleConns: 20
+    maxOpenConns: 20
+    maxLifeMinute: 10
+    
+  redis:
+    password: "*******"
+    host: "*******"
+    port: 6379
+  
+  mongo:
+    user_name: "*******"
+    password: "*******"
+    host: "*******"
+    port: 27017
+
+logConfig:
+  level: info
+  filename: logs/viper_zap_gin.log
+  maxsize: 1
+  max_age: 30
+  max_backups: 5

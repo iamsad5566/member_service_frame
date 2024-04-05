@@ -13,12 +13,15 @@ func CreateTable(server *gin.Engine, userRepo repo.UserRepoInterface, loginTimeR
 	server.POST("/create_table", handler.TokenChecker(loginTimeRepo), createTableHandler(userRepo))
 }
 
-// createTableHandler is a handler function that creates a table using the provided user repository.
-// It returns a gin.HandlerFunc that can be used as a route handler.
-// The function takes a repo.UserRepoInterface as a parameter, which represents the user repository.
-// The handler function expects a gin.Context as its parameter, which represents the HTTP request context.
-// It returns a JSON response with a success message and content if the table creation is successful,
-// or an error message and content if there is an internal server error.
+// createTableHandler creates a table in the database.
+// @Summary Create table
+// @Description Creates a new table in the database.
+// @Tags table
+// @Accept json
+// @Produce json
+// @Success 200 {object} map[string]interface{} "message: Success, content: true if the table was successfully created"
+// @Failure 500 {object} map[string]interface{} "message: Internal server error, content: error description"
+// @Router /create_table [post]
 func createTableHandler(repo repo.UserRepoInterface) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var success, err = model.CreateTable(repo)
