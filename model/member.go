@@ -43,8 +43,11 @@ func AuthenticateUser(usrRepo repo.UserRepoInterface, loginTimeRepo repo.LoginTi
 
 func UpdatePassword(usrRepo repo.UserRepoInterface, updatePassword *request.UpdateUserPassword) (bool, error) {
 	usr := object.User{
+		UserID:   updatePassword.UserID,
 		Account:  updatePassword.Account,
 		Password: updatePassword.Password,
+		Gender:   updatePassword.Gender,
+		BirthDay: updatePassword.BirthDay,
 	}
 	if isValid, err := isValidPassword(usrRepo, &usr); !isValid {
 		return false, err

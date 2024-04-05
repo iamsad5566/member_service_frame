@@ -122,7 +122,7 @@ func TestDeleteAccount(t *testing.T) {
 
 func TestExistsID(t *testing.T) {
 	user := &object.User{
-		UserID: "123",
+		Account: "test123",
 	}
 
 	db, mock, err := sqlmock.New()
@@ -131,7 +131,7 @@ func TestExistsID(t *testing.T) {
 	}
 	defer db.Close()
 
-	mock.ExpectQuery("SELECT EXISTS").WithArgs(user.UserID).WillReturnRows(sqlmock.NewRows([]string{"exists"}).AddRow(true))
+	mock.ExpectQuery("SELECT EXISTS").WithArgs(user.Account).WillReturnRows(sqlmock.NewRows([]string{"exists"}).AddRow(true))
 	pq := psql.NewUserRepository(db)
 	exists, err := pq.CheckExistsID(user)
 	assert.True(t, exists)

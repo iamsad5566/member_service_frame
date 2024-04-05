@@ -28,6 +28,7 @@ func UpdateUserPasswordChecker(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&updateUserPassword)
 	if err != nil || updateUserPassword.Account == "" || updateUserPassword.Password == "" || updateUserPassword.NewPassword == "" {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
 	}
 
 	if updateUserPassword.Password == updateUserPassword.NewPassword {

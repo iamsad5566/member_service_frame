@@ -25,5 +25,7 @@ func (user *User) ToDAO() {
 		log.Panic(err)
 	}
 	user.Password = encrypted
-	user.UserID = uuid.New().String()
+	if user.UserID == "" {
+		user.UserID = uuid.New().String()
+	}
 }
