@@ -23,7 +23,7 @@ func OAuth2Group(server *gin.Engine, userRepo repo.UserRepoInterface, loginTimeR
 var oauth2Config = &oauth2.Config{
 	ClientID:     "325768846939-4s4d9jr5jublsttd2bue1nr2vti8ocib.apps.googleusercontent.com",
 	ClientSecret: "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",
-	RedirectURL:  fmt.Sprintf("https://%s%s/oauth2/callback", config.Setting.GetMemberServiceHost(), config.Setting.GetMemberServiceRESTfulPort()),
+	RedirectURL:  fmt.Sprintf("https://%s:112/oauth2/callback", config.Setting.GetMemberServiceHost()),
 	Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
 	Endpoint:     google.Endpoint,
 }
