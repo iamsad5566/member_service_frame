@@ -2,8 +2,7 @@ name: auto CI/CD
 
 on:
   release:
-    tags:
-      - v*
+    types: [published]
 
 jobs:
   build-and-push:
