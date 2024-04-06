@@ -1,0 +1,67 @@
+name: auto CI/CD
+
+on:
+  release:
+    tags:
+      - v*
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Committed in the open-source version
+      - name: Set up GOPRIVATE
+        run: echo "GOPRIVATE=github.com/iamsad5566/*" >> $GITHUB_ENV
+
+      - name: Log in to GitHub Package Registry
+        run: echo ${{ secrets.TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build --build-arg GITHUB_TOKEN=${{ secrets.TOKEN }} --build-arg LATEST_SETCONF_VERSION=${{ secrets.LATEST_SETCONF_VERSION }} -t member_service_frame:${{github.ref_name}} .
+
+      - name: List Docker images
+        run: docker images
+
+      - name: Tag Docker image
+        run: docker tag member_service_frame:${{github.ref_name}} nf8964p5566/member_service_frame:${{github.ref_name}}
+
+      - name: Push Docker image
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker push nf8964p5566/member_service_frame:${{github.ref_name}}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to remote server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: "root"
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            echo "machine github.com login ${{ secrets.TOKEN }} password x-oauth-basic" > ~/.netrc
+
+            if docker images | grep -q "nf8964p5566/member_service_frame"; then
+                echo "Removing old member_service_frame image..."
+                docker rmi $(docker images -q nf8964p5566/member_service_frame)
+            fi
+
+            docker pull nf8964p5566/member_service_frame:${{github.ref_name}}
+
+            if [ $(docker ps -a -q -f name=member_service_frame) ]; then
+                docker stop member_service_frame
+                docker rm member_service_frame
+            fi
+
+            docker run -d --name member_service_frame --restart=always -p 112:8112 -p 113:8113 nf8964p5566/member_service_frame:${{github.ref_name}}
+
+            docker ps -a
+            docker images
