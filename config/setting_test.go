@@ -29,4 +29,6 @@ func TestNewOpenSourceVersionSetting(t *testing.T) {
 	assert.NotNil(t, setting.GetLoggerConfig())
 	assert.NotNil(t, setting.GetMongoSetting())
 	assert.NotNil(t, setting.GetMemberServiceHost())
+	assert.NotNil(t, setting.GetOauthClientID("google"))
+	assert.NotNil(t, setting.GetOauthClientSecret("google"))
 }

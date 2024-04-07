@@ -42,3 +42,8 @@ logConfig:
   maxsize: 1
   max_age: 30
   max_backups: 5
+
+oauth2:
+  google:
+    client_id: "*******"
+    client_secret: "*******"

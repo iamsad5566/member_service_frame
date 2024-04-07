@@ -82,3 +82,11 @@ func (s *OpenSourceVersionSetting) GetMongoSetting() map[string]interface{} {
 func (s *OpenSourceVersionSetting) GetMemberServiceHost() string {
 	return s.vp.GetString("member_service.host")
 }
+
+func (s *OpenSourceVersionSetting) GetOauthClientID(provider string) string {
+	return s.vp.GetString(fmt.Sprintf("oauth2.%s.client_id", provider))
+}
+
+func (s *OpenSourceVersionSetting) GetOauthClientSecret(provider string) string {
+	return s.vp.GetString(fmt.Sprintf("oauth2.%s.client_secret", provider))
+}
