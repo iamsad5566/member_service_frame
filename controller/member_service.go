@@ -38,25 +38,35 @@ func registerHandler(repo repo.UserRepoInterface) gin.HandlerFunc {
 		var rawRequest, _ = ctx.Get(handler.REQUEST_BODY)
 		var user *object.User = rawRequest.(*object.User)
 
-		var success, err = model.CheckExistsID(repo, user)
+		var exists, err = model.CheckExistsID(repo, user)
 
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
 				"message": "Internal server error",
 				"content": err.Error(),
 			})
+			return
 		} else {
-			if success {
+			if exists {
 				ctx.JSON(http.StatusBadRequest, gin.H{
 					"message": "Bad request",
 					"content": "Account already exists",
 				})
-			} else {
-				ctx.JSON(http.StatusBadRequest, gin.H{
-					"message": "",
-					"content": "",
-				})
+				return
 			}
+		}
+
+		_, err = model.AccountRegister(repo, user)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Internal server error",
+				"content": err.Error(),
+			})
+			return
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "User registered successfully",
+			})
 		}
 	}
 }

@@ -28,7 +28,7 @@ func TestRegister(t *testing.T) {
 	mock.ExpectBegin()
 	mock.ExpectPrepare("INSERT INTO member")
 	mock.ExpectExec("INSERT INTO member").
-		WithArgs(user.UserID, user.Account, user.Password, user.Gender, sqlmock.AnyArg(), sqlmock.AnyArg()).
+		WithArgs(user.UserID, user.Account, user.Password, user.Gender, sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 

@@ -16,11 +16,11 @@ func (pq *PsqlUserRepository) Register(usr *object.User) (bool, error) {
 	}
 	birthday, err := time.Parse("2006-01-02", usr.BirthDay)
 	if err != nil {
-		return false, err
+		birthday = time.Now()
 	}
 
-	var sqlQuery string = `INSERT INTO member (user_id, account, password, gender, birthday, last_time_login) 
-		VALUES ($1, $2, $3, $4, $5, $6)`
+	var sqlQuery string = `INSERT INTO member (user_id, account, password, gender, birthday, last_time_login, register_from) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
 	// Prepare the SQL query for inserting a new user
 	stmt, err := tx.Prepare(sqlQuery)
@@ -30,7 +30,7 @@ func (pq *PsqlUserRepository) Register(usr *object.User) (bool, error) {
 	defer stmt.Close()
 
 	// Execute the insert statement with the user's details
-	_, err = stmt.Exec(usr.UserID, usr.Account, usr.Password, usr.Gender, birthday, time.Now().UTC())
+	_, err = stmt.Exec(usr.UserID, usr.Account, usr.Password, usr.Gender, birthday, time.Now().UTC(), time.Now().UTC())
 	if err != nil {
 		tx.Rollback()
 		return false, err
