@@ -24,8 +24,11 @@ jobs:
 
       - name: check folder
         run: ls -la
-        
-      - name: Unit test
+     
+      - name: adjust git config
+        run: git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+
+      - name: unit test
         run: |
           echo "machine github.com login $GITHUB_TOKEN password x-oauth-basic" > ~/.netrc
           cd member_service_frame
