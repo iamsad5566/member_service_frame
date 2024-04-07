@@ -56,10 +56,13 @@ func oauth2RegisterHandler(provider string) gin.HandlerFunc {
 }
 
 func oauth2RegisterCallbackHandler(provider string, userRepo repo.UserRepoInterface) gin.HandlerFunc {
-	config := getConfigByProvider(provider)
+	configDeference := *getConfigByProvider(provider)
+	configDeference.RedirectURL = fmt.Sprintf("https://%s%s/oauth2/%s/register_callback",
+		config.Setting.GetMemberServiceFrameHost(),
+		config.Setting.GetMemberServiceFramePort(), provider)
 	return func(ctx *gin.Context) {
 		code := ctx.Query("code")
-		token, err := config.Exchange(context.Background(), code)
+		token, err := configDeference.Exchange(context.Background(), code)
 		if err != nil {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Error while exchanging code for token"})
 			return
