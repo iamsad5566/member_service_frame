@@ -25,9 +25,6 @@ jobs:
       - name: check folder
         run: ls -la
      
-      - name: adjust git config
-        run: git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-
       - name: login github
         run: |
           echo machine github.com login ${{ secrets.TOKEN }} password x-oauth-basic > ~/.netrc
