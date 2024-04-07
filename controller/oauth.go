@@ -27,7 +27,7 @@ func OAuth2Group(server *gin.Engine, userRepo repo.UserRepoInterface, loginTimeR
 var oauth2GoogleConfig = &oauth2.Config{
 	ClientID:     config.Setting.GetOauthClientID("google"),
 	ClientSecret: config.Setting.GetOauthClientSecret("google"),
-	RedirectURL: fmt.Sprintf("https://%s%s/oauth2/callback",
+	RedirectURL: fmt.Sprintf("https://%s%s/oauth2/google/callback",
 		config.Setting.GetMemberServiceFrameHost(),
 		config.Setting.GetMemberServiceFramePort()),
 	Scopes:   []string{"https://www.googleapis.com/auth/userinfo.email"},
@@ -44,9 +44,9 @@ func getConfigByProvider(provider string) *oauth2.Config {
 
 func oauth2RegisterHandler(provider string) gin.HandlerFunc {
 	configDeference := *getConfigByProvider(provider)
-	configDeference.RedirectURL = fmt.Sprintf("https://%s%s/oauth2/google/register_callback",
+	configDeference.RedirectURL = fmt.Sprintf("https://%s%s/oauth2/%s/register_callback",
 		config.Setting.GetMemberServiceFrameHost(),
-		config.Setting.GetMemberServiceFramePort())
+		config.Setting.GetMemberServiceFramePort(), provider)
 	return func(ctx *gin.Context) {
 		// Redirect user to consent page to ask for permission
 		// for the scopes specified above.
