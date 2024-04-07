@@ -27,7 +27,7 @@ import (
 
 var deployTime string = time.Now().UTC().Format(time.RFC3339)
 
-const version string = "1.0.0"
+const version string = "1.0.1"
 const dbName string = "Member"
 const redisPool int = 1
 

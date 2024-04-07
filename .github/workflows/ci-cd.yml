@@ -1,4 +1,4 @@
-name: auto CI/CD
+name: CI/CD
 
 on:
   release:

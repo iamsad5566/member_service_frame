@@ -6,11 +6,6 @@ member_service:
   RESTfulPort: :8112
   gRPCPort: :8113
 
-restaurant_service:
-  host: "*******"
-  innerPort: :8114
-  port: :888
-
 jwt:
   secret_key: "*******"
   token_expire: 86400
@@ -29,12 +24,6 @@ db:
     password: "*******"
     host: "*******"
     port: 6379
-  
-  mongo:
-    user_name: "*******"
-    password: "*******"
-    host: "*******"
-    port: 27017
 
 logConfig:
   level: info

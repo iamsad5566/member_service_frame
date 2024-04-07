@@ -63,20 +63,8 @@ func (s *OpenSourceVersionSetting) GetMemberServiceURL() string {
 	return s.vp.GetString("member_service.host") + s.vp.GetString("member_service.port")
 }
 
-func (s *OpenSourceVersionSetting) GetRestaurantPort() string {
-	return s.vp.GetString("restaurant_service.innerPort")
-}
-
-func (s *OpenSourceVersionSetting) GetRestaurantHost() string {
-	return s.vp.GetString("restaurant_service.host")
-}
-
 func (s *OpenSourceVersionSetting) GetLoggerConfig() map[string]interface{} {
 	return s.vp.GetStringMap("logConfig")
-}
-
-func (s *OpenSourceVersionSetting) GetMongoSetting() map[string]interface{} {
-	return s.vp.GetStringMap("db.mongo")
 }
 
 func (s *OpenSourceVersionSetting) GetMemberServiceHost() string {
