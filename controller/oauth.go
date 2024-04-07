@@ -20,7 +20,7 @@ func OAuth2Group(server *gin.Engine, userRepo repo.UserRepoInterface, loginTimeR
 		groupGoogle.GET("/register", oauth2RegisterHandler("google"))
 		groupGoogle.GET("/register_callback", oauth2RegisterCallbackHandler("google", userRepo))
 		groupGoogle.GET("/login", oauth2LoginHandler("google"))
-		groupGoogle.GET("/callback", oauth2CallbackHandler("google"))
+		groupGoogle.GET("/callback", oauth2CallbackHandler("google", userRepo, loginTimeRepo))
 	}
 }
 
@@ -120,7 +120,7 @@ func oauth2LoginHandler(provider string) gin.HandlerFunc {
 	}
 }
 
-func oauth2CallbackHandler(provider string) gin.HandlerFunc {
+func oauth2CallbackHandler(provider string, usrRepo repo.UserRepoInterface, loginTimeRepo repo.LoginTimeInterface) gin.HandlerFunc {
 	config := getConfigByProvider(provider)
 	return func(ctx *gin.Context) {
 		// Use the authorization code that is pushed to the redirect
@@ -131,8 +131,26 @@ func oauth2CallbackHandler(provider string) gin.HandlerFunc {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Error while exchanging code for token"})
 			return
 		}
-		// The token now contains the access token
-		ctx.JSON(http.StatusOK, gin.H{"token": token})
-	}
 
+		var client *http.Client = &http.Client{}
+		// Get user info
+		userInfo, err := model.GetUserInfo(client, token.AccessToken)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting user info"})
+			return
+		}
+
+		// Update user last login time
+		err = model.Oauth2UpdateLoginTime(userInfo, usrRepo, loginTimeRepo)
+		if err != nil && err.Error() != "user not found" {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error while updating login time"})
+			return
+		} else if err != nil && err.Error() == "user not found" {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
+			return
+		}
+
+		// The token now contains the access token
+		ctx.JSON(http.StatusOK, gin.H{"message": "Success", "content": token})
+	}
 }

@@ -34,6 +34,7 @@ func AuthenticateUser(usrRepo repo.UserRepoInterface, loginTimeRepo repo.LoginTi
 		if err != nil {
 			return false, err
 		} else {
+			usrRepo.UpdateLastTimeLogin(usr)
 			return true, nil
 		}
 	} else {

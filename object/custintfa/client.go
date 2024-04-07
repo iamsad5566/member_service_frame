@@ -1,4 +1,4 @@
-package custinfa
+package custintfa
 
 import "net/http"
 
