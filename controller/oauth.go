@@ -151,6 +151,6 @@ func oauth2CallbackHandler(provider string, usrRepo repo.UserRepoInterface, logi
 		}
 
 		// The token now contains the access token
-		ctx.JSON(http.StatusOK, gin.H{"message": "Success", "content": token})
+		ctx.JSON(http.StatusOK, gin.H{"message": "Success", "content": token, "account": userInfo.Email})
 	}
 }

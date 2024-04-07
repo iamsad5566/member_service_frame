@@ -30,6 +30,18 @@ func (s *Server) AuthorizeByToken(ctx context.Context, req *pb.AuthorizeToken) (
 		return &pb.AuthorizeResponse{Res: false}, nil
 	}
 
+	if len(md.Get("Account")) > 0 {
+		var res = model.CertifyOauthAccount(s.RedisClient, ctx, md.Get("Account")[0])
+		if res == model.Pass {
+			return &pb.AuthorizeResponse{Res: true}, nil
+		} else if res == model.LoginExpired {
+			return &pb.AuthorizeResponse{Res: false}, status.Errorf(codes.PermissionDenied,
+				"over 1 day from last logged in by Oauth2.0 flow , please login again.")
+		} else {
+			return &pb.AuthorizeResponse{Res: false}, status.Errorf(codes.PermissionDenied, "account is wrong")
+		}
+	}
+
 	tokens := md.Get("Authorization")
 	if tokens == nil {
 		return &pb.AuthorizeResponse{Res: false}, status.Errorf(codes.PermissionDenied, "token is not found")

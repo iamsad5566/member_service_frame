@@ -1,0 +1,22 @@
+name: auto test
+
+on:
+    push:
+      branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Committed in the open-source version
+      - name: Set up GOPRIVATE
+        run: echo "GOPRIVATE=github.com/iamsad5566/*" >> $GITHUB_ENV
+
+      - name: Log in to GitHub Package Registry
+        run: echo ${{ secrets.TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Test
+        run: docker run Dockerfile-test  --build-arg GITHUB_TOKEN=${{ secrets.TOKEN }} --build-arg LATEST_SETCONF_VERSION=${{ secrets.LATEST_SETCONF_VERSION }}

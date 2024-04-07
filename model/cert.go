@@ -44,3 +44,17 @@ func loginStillValid(loginTimeRepo repo.LoginTimeInterface, ctx context.Context,
 	var duration time.Duration = now.Sub(lastTimeLogin)
 	return duration.Hours() < float64(config.Setting.GetValidLogin())*24.0
 }
+
+func CertifyOauthAccount(loginTimeRepo repo.LoginTimeInterface, ctx context.Context, account string) int {
+	var lastTimeLogin, err = loginTimeRepo.GetLoginTime(ctx, account)
+	if err != nil {
+		return WrongToken
+	}
+	var now time.Time = time.Now()
+	var duration time.Duration = now.Sub(lastTimeLogin)
+	if duration.Hours() < 24.0 {
+		return Pass
+	} else {
+		return LoginExpired
+	}
+}
