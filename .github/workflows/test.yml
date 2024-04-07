@@ -20,3 +20,9 @@ jobs:
 
       - name: Test
         run: docker build -f Dockerfile-test --build-arg GITHUB_TOKEN=${{ secrets.TOKEN }} --build-arg LATEST_SETCONF_VERSION=${{ secrets.LATEST_SETCONF_VERSION }} .
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: iamsad5566/member_service_frame
