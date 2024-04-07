@@ -9,7 +9,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
 	github.com/iamsad5566/logger v0.0.0-20231120165452-294b3ef91fc7
-	github.com/iamsad5566/setconf v1.1.0
+	github.com/iamsad5566/setconf v1.1.1
 	github.com/lib/pq v1.10.9
 	github.com/redis/go-redis/v9 v9.5.1
 	github.com/spf13/viper v1.18.2
