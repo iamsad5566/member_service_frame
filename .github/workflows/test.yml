@@ -15,10 +15,7 @@ jobs:
           go-version: '1.21'
         id: go
 
-      # Committed in the open-source version
-      - name: Log in to GitHub Package Registry
-        run: echo ${{ secrets.TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        
+      # Committed in the open-source version of the repository
       - name: Clone repository 
         run: git clone https://github.com/iamsad5566/member_service_frame.git
       
@@ -27,12 +24,10 @@ jobs:
 
       - name: check folder
         run: ls -la
-
-      - name: check folder
-        run: ls -la
-
+        
       - name: Unit test
         run: |
+          echo "machine github.com login $GITHUB_TOKEN password x-oauth-basic" > ~/.netrc
           cd member_service_frame
           go test -v ./... -coverprofile=coverage.out -covermode=atomic
 
