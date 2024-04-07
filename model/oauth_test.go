@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"member_service_frame/model"
-	"member_service_frame/object/response"
 	"net/http"
 	"testing"
+
+	"github.com/iamsad5566/member_service_frame/model"
+	"github.com/iamsad5566/member_service_frame/object/response"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

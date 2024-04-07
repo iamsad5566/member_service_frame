@@ -3,10 +3,11 @@ package model
 import (
 	"context"
 	"errors"
-	"member_service_frame/object"
-	"member_service_frame/object/request"
-	"member_service_frame/repo"
-	"member_service_frame/security"
+
+	"github.com/iamsad5566/member_service_frame/object"
+	"github.com/iamsad5566/member_service_frame/object/request"
+	"github.com/iamsad5566/member_service_frame/repo"
+	"github.com/iamsad5566/member_service_frame/security"
 )
 
 // AccountRegister registers a new user account.

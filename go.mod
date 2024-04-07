@@ -1,4 +1,4 @@
-module member_service_frame
+module github.com/iamsad5566/member_service_frame
 
 go 1.21.4
 

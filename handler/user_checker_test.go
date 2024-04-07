@@ -2,10 +2,11 @@ package handler_test
 
 import (
 	"bytes"
-	"member_service_frame/handler"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/iamsad5566/member_service_frame/handler"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

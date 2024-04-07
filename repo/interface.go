@@ -2,8 +2,9 @@ package repo
 
 import (
 	"context"
-	"member_service_frame/object"
 	"time"
+
+	"github.com/iamsad5566/member_service_frame/object"
 )
 
 // UserRepoInterface defines the interface for user repository operations.

@@ -2,7 +2,8 @@ package object
 
 import (
 	"log"
-	"member_service_frame/security"
+
+	"github.com/iamsad5566/member_service_frame/security"
 
 	"github.com/google/uuid"
 )

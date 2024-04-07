@@ -1,6 +1,6 @@
 package request
 
-import "member_service_frame/object"
+import "github.com/iamsad5566/member_service_frame/object"
 
 type UpdateUserPassword struct {
 	object.User

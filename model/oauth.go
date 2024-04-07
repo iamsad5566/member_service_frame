@@ -4,11 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"member_service_frame/object"
-	"member_service_frame/object/custintfa"
-	"member_service_frame/object/response"
-	"member_service_frame/repo"
 	"net/http"
+
+	"github.com/iamsad5566/member_service_frame/object"
+
+	"github.com/iamsad5566/member_service_frame/object/response"
+
+	"github.com/iamsad5566/member_service_frame/repo"
+
+	"github.com/iamsad5566/member_service_frame/object/custintfa"
 )
 
 // GetUserInfo retrieves user information from the OAuth2 provider.

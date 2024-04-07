@@ -2,18 +2,19 @@ package model_test
 
 import (
 	"context"
-	"member_service_frame/model"
-	"member_service_frame/object"
-	"member_service_frame/object/request"
 	"testing"
 	"time"
+
+	"github.com/iamsad5566/member_service_frame/model"
+	"github.com/iamsad5566/member_service_frame/object"
+	"github.com/iamsad5566/member_service_frame/object/request"
 
 	"github.com/alicebob/miniredis/v2"
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	r "member_service_frame/repo/redis"
+	r "github.com/iamsad5566/member_service_frame/repo/redis"
 )
 
 var user = &object.User{

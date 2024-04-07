@@ -1,8 +1,9 @@
 package security_test
 
 import (
-	"member_service_frame/security"
 	"testing"
+
+	"github.com/iamsad5566/member_service_frame/security"
 
 	"github.com/stretchr/testify/assert"
 )

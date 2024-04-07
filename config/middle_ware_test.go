@@ -1,10 +1,11 @@
 package config_test
 
 import (
-	"member_service_frame/config"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/iamsad5566/member_service_frame/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

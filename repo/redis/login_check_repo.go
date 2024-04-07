@@ -2,8 +2,9 @@ package redis
 
 import (
 	"context"
-	"member_service_frame/repo"
 	"time"
+
+	"github.com/iamsad5566/member_service_frame/repo"
 
 	"github.com/redis/go-redis/v9"
 )

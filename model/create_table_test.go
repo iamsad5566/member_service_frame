@@ -1,11 +1,12 @@
 package model_test
 
 import (
-	"member_service_frame/model"
-	"member_service_frame/object"
-	"member_service_frame/repo"
 	"testing"
 
+	"github.com/iamsad5566/member_service_frame/object"
+	"github.com/iamsad5566/member_service_frame/repo"
+
+	"github.com/iamsad5566/member_service_frame/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

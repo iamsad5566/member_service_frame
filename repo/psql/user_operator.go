@@ -2,8 +2,9 @@ package psql
 
 import (
 	"errors"
-	"member_service_frame/object"
 	"time"
+
+	"github.com/iamsad5566/member_service_frame/object"
 )
 
 // Register inserts a new user into the member table in the PostgreSQL database.

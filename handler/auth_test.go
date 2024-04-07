@@ -2,18 +2,19 @@ package handler_test
 
 import (
 	"context"
-	"member_service_frame/handler"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/iamsad5566/member_service_frame/handler"
 
 	"github.com/alicebob/miniredis/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 
-	r "member_service_frame/repo/redis"
+	r "github.com/iamsad5566/member_service_frame/repo/redis"
 )
 
 func TestTokenCheckerWithRedis(t *testing.T) {

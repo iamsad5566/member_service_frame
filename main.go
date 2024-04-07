@@ -3,14 +3,15 @@ package main
 import (
 	"database/sql"
 	"log"
-	"member_service_frame/config"
-	"member_service_frame/controller"
-	_ "member_service_frame/docs"
-	"member_service_frame/repo"
 	"net"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/iamsad5566/member_service_frame/config"
+	"github.com/iamsad5566/member_service_frame/controller"
+	_ "github.com/iamsad5566/member_service_frame/docs"
+	"github.com/iamsad5566/member_service_frame/repo"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
@@ -19,9 +20,9 @@ import (
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 
-	pb "member_service_frame/grpc"
-	"member_service_frame/repo/psql"
-	r "member_service_frame/repo/redis"
+	pb "github.com/iamsad5566/member_service_frame/grpc"
+	"github.com/iamsad5566/member_service_frame/repo/psql"
+	r "github.com/iamsad5566/member_service_frame/repo/redis"
 )
 
 var deployTime string = time.Now().UTC().Format(time.RFC3339)

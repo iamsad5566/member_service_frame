@@ -3,10 +3,11 @@ package util
 import (
 	"errors"
 	"fmt"
-	"member_service_frame/config"
-	"member_service_frame/object"
 	"strings"
 	"time"
+
+	"github.com/iamsad5566/member_service_frame/config"
+	"github.com/iamsad5566/member_service_frame/object"
 
 	"encoding/json"
 

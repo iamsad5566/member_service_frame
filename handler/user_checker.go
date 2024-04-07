@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"member_service_frame/object"
-	"member_service_frame/object/request"
 	"net/http"
+
+	"github.com/iamsad5566/member_service_frame/object"
+	"github.com/iamsad5566/member_service_frame/object/request"
 
 	"github.com/gin-gonic/gin"
 )

@@ -9,8 +9,8 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 
-	"member_service_frame/model"
-	r "member_service_frame/repo/redis"
+	"github.com/iamsad5566/member_service_frame/model"
+	r "github.com/iamsad5566/member_service_frame/repo/redis"
 )
 
 func TestCertifyToken(t *testing.T) {

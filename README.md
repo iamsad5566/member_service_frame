@@ -1,4 +1,7 @@
 # Application Overview
+[![auto test](https://github.com/iamsad5566/member_service_frame/actions/workflows/test.yml/badge.svg)](https://github.com/iamsad5566/member_service_frame/actions/workflows/test.yml)
+
+
 This backend application provides a comprehensive member service system with both RESTful APIs and a gRPC service. It supports functionalities like user registration, login, password update, and user existence verification. The application also automates the creation of the necessary PostgreSQL database and includes a gRPC service for token-based authorization.
 - [Features](#features)
 - [gRPC Service](#grpc-service)

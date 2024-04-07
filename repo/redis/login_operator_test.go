@@ -9,7 +9,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 
-	r "member_service_frame/repo/redis"
+	r "github.com/iamsad5566/member_service_frame/repo/redis"
 )
 
 // TestRedisLoginCheckRepository is a unit test function that tests the RedisLoginCheckRepository.

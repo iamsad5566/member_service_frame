@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"member_service_frame/config"
-	pb "member_service_frame/grpc"
-	"member_service_frame/model"
-	"member_service_frame/repo"
+
+	"github.com/iamsad5566/member_service_frame/config"
+	pb "github.com/iamsad5566/member_service_frame/grpc"
+	"github.com/iamsad5566/member_service_frame/model"
+	"github.com/iamsad5566/member_service_frame/repo"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

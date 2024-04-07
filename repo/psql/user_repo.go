@@ -2,7 +2,8 @@ package psql
 
 import (
 	"database/sql"
-	"member_service_frame/repo"
+
+	"github.com/iamsad5566/member_service_frame/repo"
 )
 
 type PsqlUserRepository struct {

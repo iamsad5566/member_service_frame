@@ -1,9 +1,10 @@
 package util_test
 
 import (
-	"member_service_frame/object"
-	"member_service_frame/util"
 	"testing"
+
+	"github.com/iamsad5566/member_service_frame/object"
+	"github.com/iamsad5566/member_service_frame/util"
 
 	"github.com/stretchr/testify/assert"
 )

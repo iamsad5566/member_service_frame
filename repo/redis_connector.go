@@ -3,7 +3,8 @@ package repo
 import (
 	"encoding/json"
 	"fmt"
-	"member_service_frame/config"
+
+	"github.com/iamsad5566/member_service_frame/config"
 
 	"github.com/redis/go-redis/v9"
 )

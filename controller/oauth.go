@@ -3,11 +3,12 @@ package controller
 import (
 	"context"
 	"fmt"
-	"member_service_frame/config"
-	"member_service_frame/model"
-	"member_service_frame/object"
-	"member_service_frame/repo"
 	"net/http"
+
+	"github.com/iamsad5566/member_service_frame/config"
+	"github.com/iamsad5566/member_service_frame/model"
+	"github.com/iamsad5566/member_service_frame/object"
+	"github.com/iamsad5566/member_service_frame/repo"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"

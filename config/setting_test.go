@@ -1,8 +1,9 @@
 package config_test
 
 import (
-	"member_service_frame/config"
 	"testing"
+
+	"github.com/iamsad5566/member_service_frame/config"
 
 	"github.com/iamsad5566/setconf"
 	"github.com/stretchr/testify/assert"

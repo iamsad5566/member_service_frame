@@ -1,9 +1,11 @@
 package psql_test
 
 import (
-	"member_service_frame/object"
-	"member_service_frame/repo/psql"
 	"testing"
+
+	"github.com/iamsad5566/member_service_frame/object"
+
+	"github.com/iamsad5566/member_service_frame/repo/psql"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"

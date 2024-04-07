@@ -3,11 +3,12 @@ package model
 import (
 	"context"
 	"log"
-	"member_service_frame/config"
-	"member_service_frame/object"
-	"member_service_frame/repo"
-	"member_service_frame/util"
 	"time"
+
+	"github.com/iamsad5566/member_service_frame/config"
+	"github.com/iamsad5566/member_service_frame/object"
+	"github.com/iamsad5566/member_service_frame/repo"
+	"github.com/iamsad5566/member_service_frame/util"
 
 	"github.com/golang-jwt/jwt/v5"
 )

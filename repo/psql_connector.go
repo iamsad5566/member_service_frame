@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"member_service_frame/config"
 	"time"
+
+	"github.com/iamsad5566/member_service_frame/config"
 
 	_ "github.com/lib/pq"
 )

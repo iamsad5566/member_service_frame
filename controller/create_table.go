@@ -1,10 +1,11 @@
 package controller
 
 import (
-	"member_service_frame/handler"
-	"member_service_frame/model"
-	"member_service_frame/repo"
 	"net/http"
+
+	"github.com/iamsad5566/member_service_frame/handler"
+	"github.com/iamsad5566/member_service_frame/model"
+	"github.com/iamsad5566/member_service_frame/repo"
 
 	"github.com/gin-gonic/gin"
 )

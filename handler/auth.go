@@ -2,10 +2,11 @@ package handler
 
 import (
 	"context"
-	"member_service_frame/model"
-	"member_service_frame/repo"
 	"net/http"
 	"strings"
+
+	"github.com/iamsad5566/member_service_frame/model"
+	"github.com/iamsad5566/member_service_frame/repo"
 
 	"github.com/gin-gonic/gin"
 )
