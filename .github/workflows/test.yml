@@ -29,6 +29,12 @@ jobs:
       
       - name: CD to the cloned repository
         run: cd member_service_frame
+      
+      - name: private repo
+        run: go env -w GOPRIVATE=github.com/iamsad5566/*
+
+      - name: Install dependencies
+        run: go mod download
 
       - name: Unit test
         run: go test -v ./... -coverprofile=coverage.out -covermode=atomic
