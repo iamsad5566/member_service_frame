@@ -16,6 +16,9 @@ func TestEncrypter(t *testing.T) {
 
 	_, err = security.Encrypter("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
 	assert.ErrorContains(t, err, "bcrypt: password length exceeds 72 bytes")
+
+	_, err = security.Encrypter("")
+	assert.NoError(t, err)
 }
 
 func TestDecrypted(t *testing.T) {
