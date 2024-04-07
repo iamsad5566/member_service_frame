@@ -95,9 +95,8 @@ This will start the Member Service, which includes the RESTful API, gRPC service
 The Member Service provides a Swagger UI for API documentation. You can access it at `http://localhost:8080/swagger/index.html` (replace `8080` with the configured port if different).
 
 ### Deployment
-The Member Service can be deployed using Docker containers. Two Dockerfiles are provided:
+The Member Service can be deployed using Docker containers. One Dockerfile is provided:
 1. **Dockerfile:** For building and running the application.
-2. **Dockerfile-test:** For running unit tests while there's a new commit in the main branch.
 
 ### Building the Docker Image
 To build the Docker image, run the following command:
@@ -105,7 +104,7 @@ To build the Docker image, run the following command:
 docker build --build-arg GITHUB_TOKEN=<your_github_token> --build-arg LATEST_SETCONF_VERSION=<setconf_version> -t member_service .
 ```
 
-Replace `<your_github_token>` with your GitHub personal access token and `<setconf_version>` with the latest version of the setconf repository. By the way, if you decide to use the open-source implementation of the config setting, please remove everything related to `setconf` and `GOPRIVATE` in the `Dockerfile`, `Dockerfile-test` and `./github/workflows/ci-cd.yml`, `./github/workflows/test.yml`.
+Replace `<your_github_token>` with your GitHub personal access token and `<setconf_version>` with the latest version of the setconf repository. By the way, if you decide to use the open-source implementation of the config setting, please remove everything related to `setconf` and `GOPRIVATE` in the `Dockerfile`, and `./github/workflows/ci-cd.yml`, `./github/workflows/test.yml`.
 
 ### Running the Docker Container
 After building the Docker image, you can run the container with the following command:

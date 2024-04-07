@@ -1,2 +1,3 @@
 {"level":"INFO","time":"2024-04-06T00:11:15.509+0800","caller":"ginlog/ginlog.go:79","msg":"/test","status":200,"method":"GET","path":"/test","query":"","ip":"","user-agent":"","errors":"","cost":0.000002666}
 {"level":"INFO","time":"2024-04-07T16:22:31.252+0800","caller":"ginlog/ginlog.go:79","msg":"/test","status":200,"method":"GET","path":"/test","query":"","ip":"","user-agent":"","errors":"","cost":0.000001042}
+{"level":"INFO","time":"2024-04-08T02:26:48.444+0800","caller":"ginlog/ginlog.go:79","msg":"/test","status":200,"method":"GET","path":"/test","query":"","ip":"","user-agent":"","errors":"","cost":0.000004958}

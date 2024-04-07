@@ -42,7 +42,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
   title: Member Service API
-  version: 1.0.0
+  version: 1.0.1
 paths:
   /create_table:
     post:
