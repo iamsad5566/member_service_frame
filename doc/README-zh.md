@@ -2,6 +2,7 @@
 [![auto test](https://github.com/iamsad5566/member_service_frame/actions/workflows/test.yml/badge.svg)](https://github.com/iamsad5566/member_service_frame/actions/workflows/test.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/iamsad5566/member_service_frame)](https://goreportcard.com/report/github.com/iamsad5566/member_service_frame)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![codecov](https://codecov.io/gh/iamsad5566/member_service_frame/graph/badge.svg?token=NTFKVYJH4K)](https://codecov.io/gh/iamsad5566/member_service_frame)
 
 
 [中文版](/doc/README-zh.md) , [English](../README.md)
