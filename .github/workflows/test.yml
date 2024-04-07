@@ -17,9 +17,21 @@ jobs:
 
       - name: Log in to GitHub Package Registry
         run: echo ${{ secrets.TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        
+      - name: Clone repository 
+        run: git clone https://github.com/iamsad5566/member_service_frame.git
+      
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.21'
+        id: go
+      
+      - name: CD to the cloned repository
+        run: cd member_service_frame
 
-      - name: Test
-        run: docker build -f Dockerfile-test --build-arg GITHUB_TOKEN=${{ secrets.TOKEN }} --build-arg LATEST_SETCONF_VERSION=${{ secrets.LATEST_SETCONF_VERSION }} .
+      - name: Unit test
+        run: go test -v ./... -coverprofile=coverage.out -covermode=atomic
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4

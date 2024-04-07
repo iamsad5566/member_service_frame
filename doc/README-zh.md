@@ -96,9 +96,8 @@ go build
 會員服務提供Swagger UI的API文件，您可以在`http://localhost:8080/swagger/index.html`訪問(如果配置的埠號不是8080，請替換為對應值)。
 
 ### 部署
-可以使用Docker容器部署會員服務，此專案提供了兩個Dockerfile：
+可以使用Docker容器部署會員服務，此專案提供了一個Dockerfile：
 1. **Dockerfile:** 用於建置和運行應用程式。
-2. **Dockerfile-test** 當 `main` 分支有更新時，運行單元測試。
 
 ### 建置Docker映像檔
 若要建置Docker映像檔,請運行以下指令：
@@ -106,7 +105,7 @@ go build
 docker build --build-arg GITHUB_TOKEN=<your_github_token> --build-arg LATEST_SETCONF_VERSION=<setconf_version> -t member_service .
 ```
 
-將<your_github_token>替換為您的GitHub個人訪問令牌,<setconf_version>替換為setconf存放庫的最新版本。順帶一提，若你決定使用開源版設定實作，請將 `Dockerfile`、 `Dockerfile-test`、`./github/workflows/ci-cd.yml`，和 `./github/workflows/test.yml` 中所有與 `setconf` 和 `GOPRIVATE` 有關的內容刪除。
+將<your_github_token>替換為您的GitHub個人訪問令牌,<setconf_version>替換為setconf存放庫的最新版本。順帶一提，若你決定使用開源版設定實作，請將 `Dockerfile`、`./github/workflows/ci-cd.yml`，和 `./github/workflows/test.yml` 中所有與 `setconf` 和 `GOPRIVATE` 有關的內容刪除。
 
 ### 運行Docker容器
 建置好映像檔後,可以用以下指令運行容器:

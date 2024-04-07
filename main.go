@@ -32,7 +32,7 @@ const dbName string = "Member"
 const redisPool int = 1
 
 // @title           Member Service API
-// @version         {version}
+// @version         1.0.1
 // @description     This is a RESTful API service for member service.
 // @termsOfService  http://swagger.io/terms/
 
