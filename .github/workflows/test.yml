@@ -23,13 +23,16 @@ jobs:
         run: git clone https://github.com/iamsad5566/member_service_frame.git
       
       - name: CD to the cloned repository
-        run: cd member_service_frame
+        run: cd ./member_service_frame
       
       - name: private repo
         run: go env -w GOPRIVATE=github.com/iamsad5566/*
 
       - name: Install dependencies
         run: go env
+
+      - name: check folder
+        run: ls -la
 
       - name: Unit test
         run: go test -v ./... -coverprofile=coverage.out -covermode=atomic
