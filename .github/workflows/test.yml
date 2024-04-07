@@ -9,23 +9,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      # Committed in the open-source version
-      - name: Set up GOPRIVATE
-        run: echo "GOPRIVATE=github.com/iamsad5566/*" >> $GITHUB_ENV
-
-      - name: Log in to GitHub Package Registry
-        run: echo ${{ secrets.TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        
-      - name: Clone repository 
-        run: git clone https://github.com/iamsad5566/member_service_frame.git
-      
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
           go-version: '1.21'
         id: go
+
+      # Committed in the open-source version
+      - name: Log in to GitHub Package Registry
+        run: echo ${{ secrets.TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        
+      - name: Clone repository 
+        run: git clone https://github.com/iamsad5566/member_service_frame.git
       
       - name: CD to the cloned repository
         run: cd member_service_frame
@@ -34,7 +29,7 @@ jobs:
         run: go env -w GOPRIVATE=github.com/iamsad5566/*
 
       - name: Install dependencies
-        run: go mod download
+        run: go env
 
       - name: Unit test
         run: go test -v ./... -coverprofile=coverage.out -covermode=atomic
