@@ -236,6 +236,64 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/oauth2/{provider}/login": {
+            "get": {
+                "description": "Redirects user to the OAuth2 provider's consent page to ask for permission.",
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "OAuth2 login",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "OAuth2 Provider",
+                        "name": "provider",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirects to the OAuth2 provider's consent page",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth2/{provider}/register": {
+            "get": {
+                "description": "Redirects user to the OAuth2 provider's consent page to ask for permission.",
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "OAuth2 registration",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "OAuth2 Provider",
+                        "name": "provider",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirects to the OAuth2 provider's consent page",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

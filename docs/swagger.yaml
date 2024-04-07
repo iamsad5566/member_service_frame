@@ -190,6 +190,46 @@ paths:
       summary: Update user password
       tags:
       - user
+  /oauth2/{provider}/login:
+    get:
+      description: Redirects user to the OAuth2 provider's consent page to ask for
+        permission.
+      parameters:
+      - description: OAuth2 Provider
+        in: path
+        name: provider
+        required: true
+        type: string
+      produces:
+      - text/html
+      responses:
+        "302":
+          description: Redirects to the OAuth2 provider's consent page
+          schema:
+            type: string
+      summary: OAuth2 login
+      tags:
+      - auth
+  /oauth2/{provider}/register:
+    get:
+      description: Redirects user to the OAuth2 provider's consent page to ask for
+        permission.
+      parameters:
+      - description: OAuth2 Provider
+        in: path
+        name: provider
+        required: true
+        type: string
+      produces:
+      - text/html
+      responses:
+        "302":
+          description: Redirects to the OAuth2 provider's consent page
+          schema:
+            type: string
+      summary: OAuth2 registration
+      tags:
+      - auth
 securityDefinitions:
   BasicAuth:
     type: basic

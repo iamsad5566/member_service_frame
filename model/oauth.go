@@ -2,18 +2,19 @@ package model
 
 import (
 	"encoding/json"
+	"member_service_frame/object/custinfa"
 	"member_service_frame/object/response"
 	"net/http"
 )
 
-func GetUserInfo(accessToken string) (*response.UserInfo, error) {
+// GetUserInfo retrieves user information from the OAuth2 provider.
+func GetUserInfo(client custinfa.Client, accessToken string) (*response.UserInfo, error) {
 	var req, err = http.NewRequest("GET", "https://www.googleapis.com/oauth2/v2/userinfo", nil)
 	if err != nil {
 		return nil, err
 	}
 
 	req.Header.Set("Authorization", "Bearer "+accessToken)
-	var client *http.Client = &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err

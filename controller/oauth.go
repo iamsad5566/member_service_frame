@@ -42,6 +42,14 @@ func getConfigByProvider(provider string) *oauth2.Config {
 	return nil
 }
 
+// oauth2RegisterHandler handles OAuth2 registration.
+// @Summary OAuth2 registration
+// @Description Redirects user to the OAuth2 provider's consent page to ask for permission.
+// @Tags auth
+// @Produce html
+// @Param provider path string true "OAuth2 Provider"
+// @Success 302 {string} string "Redirects to the OAuth2 provider's consent page"
+// @Router /oauth2/{provider}/register [get]
 func oauth2RegisterHandler(provider string) gin.HandlerFunc {
 	configDeference := *getConfigByProvider(provider)
 	configDeference.RedirectURL = fmt.Sprintf("https://%s%s/oauth2/%s/register_callback",
@@ -67,10 +75,10 @@ func oauth2RegisterCallbackHandler(provider string, userRepo repo.UserRepoInterf
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Error while exchanging code for token"})
 			return
 		}
-		ctx.JSON(http.StatusOK, gin.H{"token": token})
 
+		var client *http.Client = &http.Client{}
 		// Get user info
-		userInfo, err := model.GetUserInfo(token.AccessToken)
+		userInfo, err := model.GetUserInfo(client, token.AccessToken)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting user info"})
 			return
@@ -94,6 +102,14 @@ func oauth2RegisterCallbackHandler(provider string, userRepo repo.UserRepoInterf
 	}
 }
 
+// oauth2LoginHandler handles OAuth2 login.
+// @Summary OAuth2 login
+// @Description Redirects user to the OAuth2 provider's consent page to ask for permission.
+// @Tags auth
+// @Produce html
+// @Param provider path string true "OAuth2 Provider"
+// @Success 302 {string} string "Redirects to the OAuth2 provider's consent page"
+// @Router /oauth2/{provider}/login [get]
 func oauth2LoginHandler(provider string) gin.HandlerFunc {
 	config := getConfigByProvider(provider)
 	return func(ctx *gin.Context) {
