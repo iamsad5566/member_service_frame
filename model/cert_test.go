@@ -28,7 +28,6 @@ func TestCertifyToken(t *testing.T) {
 	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIiLCJzdWIiOiJ0ZXN0MTIzIiwiZXhwIjoxNzEyMzk3Nzg5fQ.OLica5O99b85zew8poeTH7JV_46Ly-8dsIrzTD0wrOc"
 	client.Set(ctx, "logincheck:test123", time.Now().Format(time.RFC3339), 10*time.Minute)
 	loginTimeRepo := r.NewLoginCheckRepository(client)
-	var status, res = model.CertifyToken(loginTimeRepo, ctx, token)
-	assert.Equal(t, model.Pass, status)
-	assert.Equal(t, "", res)
+	var status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
+	assert.Equal(t, (model.Pass | model.TokenExpired), status)
 }

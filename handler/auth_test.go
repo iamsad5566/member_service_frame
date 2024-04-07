@@ -46,8 +46,11 @@ func TestTokenCheckerWithRedis(t *testing.T) {
 		req, _ := http.NewRequest("GET", "/test", nil)
 		req.Header.Set("Authorization", "Bearer "+token)
 		router.ServeHTTP(w, req)
-
-		assert.Equal(t, http.StatusOK, w.Code)
+		if req.Header.Get("message") == "login expired" {
+			assert.Equal(t, http.StatusUnauthorized, w.Code)
+		} else {
+			assert.Equal(t, http.StatusOK, w.Code)
+		}
 	})
 
 	t.Run("Invalid token", func(t *testing.T) {

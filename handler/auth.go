@@ -19,10 +19,18 @@ func TokenChecker(loginTimeRepo repo.LoginTimeInterface) gin.HandlerFunc {
 			return
 		}
 
-		var res, _ = model.CertifyToken(loginTimeRepo, context, strings.Replace(token, "Bearer ", "", -1))
-		if res != model.Pass {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		var res, refreshToken = model.CertifyToken(loginTimeRepo, context, strings.Replace(token, "Bearer ", "", -1))
+		if res == model.TokenExpired {
+			ctx.Header("Authorization", "Bearer "+refreshToken)
+		} else if res == model.WrongToken {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "wrong token"})
 			return
+		} else if res == model.LoginExpired {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "login expired"})
+			ctx.Header("message", "login expired")
+			return
+		} else {
+			ctx.Next()
 		}
 	}
 }
