@@ -2,6 +2,7 @@ package model_test
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 
@@ -65,6 +66,20 @@ func TestAuthenticateUser(t *testing.T) {
 
 	assert.True(t, success)
 	assert.Nil(t, err)
+
+	mockRepo = new(MockUserRepo)
+	mockRepo.On("GetPassword", user).Return("", errors.New("user not found"))
+	mockRepo.On("UpdateLastTimeLogin", user).Return(true, nil)
+	success, err = model.AuthenticateUser(mockRepo, loginTimeRepo, user)
+	assert.False(t, success)
+	assert.Error(t, err)
+
+	mockRepo = new(MockUserRepo)
+	mockRepo.On("GetPassword", user).Return("wrongpassword", nil)
+	mockRepo.On("UpdateLastTimeLogin", user).Return(true, nil)
+	success, err = model.AuthenticateUser(mockRepo, loginTimeRepo, user)
+	assert.False(t, success)
+	assert.Error(t, err)
 }
 
 func TestUpdatePassword(t *testing.T) {
@@ -92,6 +107,18 @@ func TestUpdatePassword(t *testing.T) {
 
 	assert.True(t, success)
 	assert.Nil(t, err)
+
+	mockRepo = new(MockUserRepo)
+	mockRepo.On("GetPassword", user).Return("", errors.New("user not found"))
+	success, err = model.UpdatePassword(mockRepo, updatePassword)
+	assert.False(t, success)
+	assert.Error(t, err)
+
+	mockRepo = new(MockUserRepo)
+	mockRepo.On("GetPassword", user).Return("wrongpassword", nil)
+	success, err = model.UpdatePassword(mockRepo, updatePassword)
+	assert.False(t, success)
+	assert.Error(t, err)
 }
 
 func TestCheckExistsID(t *testing.T) {

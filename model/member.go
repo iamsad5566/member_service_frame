@@ -31,13 +31,9 @@ func AuthenticateUser(usrRepo repo.UserRepoInterface, loginTimeRepo repo.LoginTi
 	}
 
 	if passwordIsCorrect := security.IsConfirmedAfterDecrypted(usr.Password, hashStr); passwordIsCorrect {
-		_, err := loginTimeRepo.SetLoginTime(context.Background(), usr.Account)
-		if err != nil {
-			return false, err
-		} else {
-			usrRepo.UpdateLastTimeLogin(usr)
-			return true, nil
-		}
+		loginTimeRepo.SetLoginTime(context.Background(), usr.Account)
+		usrRepo.UpdateLastTimeLogin(usr)
+		return true, nil
 	} else {
 		return false, errors.New("password incorrect")
 	}
