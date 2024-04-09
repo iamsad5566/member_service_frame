@@ -52,8 +52,5 @@ func Oauth2UpdateLoginTime(userInfo *response.UserInfo, usrRepo repo.UserRepoInt
 		return err
 	}
 	_, err = loginTimeRepo.SetLoginTime(context.Background(), usr.Account)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

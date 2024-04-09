@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"os"
 
@@ -60,21 +59,12 @@ func Cors() gin.HandlerFunc {
 
 func setLoggers(server *gin.Engine) {
 	var logConfig *loggerConfig = func() *loggerConfig {
-		b, err := json.Marshal(Setting.GetLoggerConfig())
-		if err != nil {
-			log.Fatal(err)
-		}
+		b, _ := json.Marshal(Setting.GetLoggerConfig())
 		var logger *loggerConfig = new(loggerConfig)
-		err = json.Unmarshal(b, &logger)
-		if err != nil {
-			log.Fatal(err)
-		}
+		json.Unmarshal(b, &logger)
 		return logger
 	}()
 
-	err := ginlog.InitLogger(logConfig)
-	if err != nil {
-		log.Fatal(err)
-	}
+	ginlog.InitLogger(logConfig)
 	server.Use(ginlog.GinLogger(ginlog.Logger), ginlog.GinRecovery(ginlog.Logger, true))
 }
