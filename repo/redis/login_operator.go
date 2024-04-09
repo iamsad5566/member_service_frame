@@ -12,9 +12,6 @@ const keySet string = "logincheck:"
 // It returns a boolean indicating whether the operation was successful and an error, if any.
 func (r *RedisLoginCheckRepository) SetLoginTime(ctx context.Context, account string) (bool, error) {
 	err := r.client.Set(ctx, keySet+account, time.Now().Format(time.RFC3339), 0).Err()
-	if err != nil {
-		return false, err
-	}
 	return err == nil, err
 }
 

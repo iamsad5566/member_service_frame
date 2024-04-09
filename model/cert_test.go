@@ -10,7 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/iamsad5566/member_service_frame/model"
+	"github.com/iamsad5566/member_service_frame/object"
 	r "github.com/iamsad5566/member_service_frame/repo/redis"
+	"github.com/iamsad5566/member_service_frame/util"
 )
 
 func TestCertifyToken(t *testing.T) {
@@ -30,6 +32,19 @@ func TestCertifyToken(t *testing.T) {
 	loginTimeRepo := r.NewLoginCheckRepository(client)
 	var status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
 	assert.Equal(t, (model.Pass | model.TokenExpired), status)
+
+	token = "45566"
+	status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
+	assert.Equal(t, model.WrongToken, status)
+
+	token = util.GenerateToken(&object.User{UserID: "d878392c-0b31-4f8b-a09a-1a6bdd0d1cc9",
+		Account: "test123"})
+	status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
+	assert.Equal(t, model.Pass, status)
+
+	client.Set(ctx, "logincheck:test123", time.Now().Add(-20*24*time.Hour).Format(time.RFC3339), 10*time.Minute)
+	status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
+	assert.Equal(t, model.LoginExpired, status)
 }
 
 func TestCertifyOauthAccount(t *testing.T) {
@@ -50,4 +65,11 @@ func TestCertifyOauthAccount(t *testing.T) {
 	loginTimeRepo := r.NewLoginCheckRepository(client)
 	var status = model.CertifyOauthAccount(loginTimeRepo, ctx, testAccount)
 	assert.Equal(t, model.Pass, status)
+
+	client.Set(ctx, "logincheck:"+testAccount, time.Now().Add(-2*24*time.Hour).Format(time.RFC3339), 10*time.Minute)
+	status = model.CertifyOauthAccount(loginTimeRepo, ctx, testAccount)
+	assert.Equal(t, model.LoginExpired, status)
+
+	status = model.CertifyOauthAccount(loginTimeRepo, ctx, "test")
+	assert.Equal(t, model.WrongToken, status)
 }
