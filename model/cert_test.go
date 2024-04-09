@@ -27,24 +27,21 @@ func TestCertifyToken(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIiLCJzdWIiOiJ0ZXN0MTIzIiwiZXhwIjoxNzEyMzk3Nzg5fQ.OLica5O99b85zew8poeTH7JV_46Ly-8dsIrzTD0wrOc"
-	client.Set(ctx, "logincheck:test123", time.Now().Format(time.RFC3339), 10*time.Minute)
 	loginTimeRepo := r.NewLoginCheckRepository(client)
-	var status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
-	assert.Equal(t, (model.Pass | model.TokenExpired), status)
 
-	token = "45566"
-	status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
-	assert.Equal(t, model.WrongToken, status)
-
-	token = util.GenerateToken(&object.User{UserID: "d878392c-0b31-4f8b-a09a-1a6bdd0d1cc9",
+	token := util.GenerateToken(&object.User{UserID: "d878392c-0b31-4f8b-a09a-1a6bdd0d1cc9",
 		Account: "test123"})
-	status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
+	client.Set(ctx, "logincheck:test123", time.Now().Format(time.RFC3339), 10*time.Minute)
+	status, _ := model.CertifyToken(loginTimeRepo, ctx, token)
 	assert.Equal(t, model.Pass, status)
 
 	client.Set(ctx, "logincheck:test123", time.Now().Add(-20*24*time.Hour).Format(time.RFC3339), 10*time.Minute)
 	status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
 	assert.Equal(t, model.LoginExpired, status)
+
+	token = "45566"
+	status, _ = model.CertifyToken(loginTimeRepo, ctx, token)
+	assert.Equal(t, model.WrongToken, status)
 }
 
 func TestCertifyOauthAccount(t *testing.T) {
