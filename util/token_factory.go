@@ -1,8 +1,6 @@
 package util
 
 import (
-	"errors"
-	"fmt"
 	"strings"
 	"time"
 
@@ -59,10 +57,7 @@ func GenerateToken(user *object.User) string {
 func CertificateToken(tokenStr string) (string, string, error) {
 	var jwtSetting *jwtSetting = newJWT()
 	var claim claims
-	token, err := jwt.ParseWithClaims(tokenStr, &claim, func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
-		}
+	_, err := jwt.ParseWithClaims(tokenStr, &claim, func(t *jwt.Token) (interface{}, error) {
 		return []byte(jwtSetting.Key), nil
 	})
 
@@ -72,9 +67,6 @@ func CertificateToken(tokenStr string) (string, string, error) {
 			return claim.UserID, claim.Subject, jwt.ErrTokenExpired
 		}
 		return "", "", err
-	}
-	if !token.Valid {
-		return "", "", errors.New("invalid token")
 	}
 	return claim.UserID, claim.Subject, nil
 }
