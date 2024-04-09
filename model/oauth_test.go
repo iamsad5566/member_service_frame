@@ -45,6 +45,18 @@ func TestGetUserInfo(t *testing.T) {
 	assert.Equal(t, "test@example.com", userInfoResp.Email)
 
 	mockClient.AssertExpectations(t)
+
+	mockClient = new(MockHTTPClient)
+	mockClient.On("Do", mock.Anything).Return(resp, errors.New("unexpected error"))
+	userInfoResp, err = model.GetUserInfo(mockClient, "mockAccessToken")
+	assert.Error(t, err)
+	assert.Nil(t, userInfoResp)
+
+	mockClient = new(MockHTTPClient)
+	mockClient.On("Do", mock.Anything).Return(&http.Response{StatusCode: 400, Body: io.NopCloser(&io.LimitedReader{})}, nil)
+	userInfoResp, err = model.GetUserInfo(mockClient, "mockAccessToken")
+	assert.Error(t, err)
+	assert.Nil(t, userInfoResp)
 }
 
 func TestOauth2UpdateLoginTime(t *testing.T) {
