@@ -3,12 +3,16 @@ package model_test
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"testing"
 
+	"github.com/alicebob/miniredis/v2"
 	"github.com/iamsad5566/member_service_frame/model"
 	"github.com/iamsad5566/member_service_frame/object/response"
+	r "github.com/iamsad5566/member_service_frame/repo/redis"
+	"github.com/redis/go-redis/v9"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -41,4 +45,46 @@ func TestGetUserInfo(t *testing.T) {
 	assert.Equal(t, "test@example.com", userInfoResp.Email)
 
 	mockClient.AssertExpectations(t)
+}
+
+func TestOauth2UpdateLoginTime(t *testing.T) {
+	mr, err := miniredis.Run()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when running miniredis", err)
+	}
+	defer mr.Close()
+
+	client := redis.NewClient(&redis.Options{
+		Addr: mr.Addr(),
+	})
+
+	userInfo := &response.UserInfo{
+		Email: "nf8964p5566@gmail.comt",
+	}
+
+	mockUserRepo := new(MockUserRepo)
+	mockUserRepo.On("UpdateLastTimeLogin", mock.Anything).Return(true, nil)
+	mockUserRepo.On("CheckExistsID", mock.Anything).Return(true, nil)
+
+	loginTimeRepo := r.NewLoginCheckRepository(client)
+	err = model.Oauth2UpdateLoginTime(userInfo, mockUserRepo, loginTimeRepo)
+	assert.NoError(t, err)
+
+	mockUserRepo = new(MockUserRepo)
+	mockUserRepo.On("UpdateLastTimeLogin", mock.Anything).Return(false, errors.New("unexpected error"))
+	mockUserRepo.On("CheckExistsID", mock.Anything).Return(true, nil)
+	err = model.Oauth2UpdateLoginTime(userInfo, mockUserRepo, loginTimeRepo)
+	assert.Error(t, err)
+
+	mockUserRepo = new(MockUserRepo)
+	mockUserRepo.On("UpdateLastTimeLogin", mock.Anything).Return(true, nil)
+	mockUserRepo.On("CheckExistsID", mock.Anything).Return(false, errors.New("ID not found"))
+	err = model.Oauth2UpdateLoginTime(userInfo, mockUserRepo, loginTimeRepo)
+	assert.Error(t, err)
+
+	mockUserRepo = new(MockUserRepo)
+	mockUserRepo.On("UpdateLastTimeLogin", mock.Anything).Return(false, nil)
+	mockUserRepo.On("CheckExistsID", mock.Anything).Return(false, nil)
+	err = model.Oauth2UpdateLoginTime(userInfo, mockUserRepo, loginTimeRepo)
+	assert.Error(t, err)
 }

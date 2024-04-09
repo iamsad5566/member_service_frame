@@ -47,4 +47,8 @@ func TestRedisLoginCheckRepository(t *testing.T) {
 	assert.NoError(t, err)
 	parsedTime, _ := time.Parse(time.RFC3339, storedTime)
 	assert.WithinDuration(t, retrievedTime, parsedTime, time.Second)
+
+	// Test the case where the account does not exist.
+	_, err = repo.GetLoginTime(ctx, "user2")
+	assert.Error(t, err)
 }

@@ -1,6 +1,7 @@
 package psql_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/iamsad5566/member_service_frame/object"
@@ -17,7 +18,7 @@ func TestRegister(t *testing.T) {
 		Account:  "testuser",
 		Password: "password",
 		Gender:   "male",
-		BirthDay: "1990-01-01",
+		BirthDay: "",
 	}
 
 	db, mock, err := sqlmock.New()
@@ -43,6 +44,23 @@ func TestRegister(t *testing.T) {
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Errorf("there were unfulfilled expectations: %s", err)
 	}
+
+	mock.ExpectBegin().WillReturnError(errors.New("begin error"))
+	success, err = pq.Register(user)
+	assert.False(t, success)
+	assert.NotNil(t, err)
+
+	mock.ExpectBegin()
+	mock.ExpectPrepare("INSERT INTO member").WillReturnError(errors.New("prepare error"))
+	success, err = pq.Register(user)
+	assert.False(t, success)
+	assert.NotNil(t, err)
+
+	mock.ExpectPrepare("INSERT INTO member")
+	mock.ExpectCommit().WillReturnError(errors.New("commit error"))
+	success, err = pq.Register(user)
+	assert.False(t, success)
+	assert.NotNil(t, err)
 }
 
 func TestGetPassword(t *testing.T) {
@@ -63,6 +81,11 @@ func TestGetPassword(t *testing.T) {
 	password, err := pq.GetPassword(user)
 	assert.Equal(t, user.Password, password)
 	assert.Nil(t, err)
+
+	user.Password = ""
+	password, err = pq.GetPassword(user)
+	assert.Equal(t, "", password)
+	assert.NotNil(t, err)
 }
 
 func TestUpdateLastTimeLogin(t *testing.T) {
@@ -83,6 +106,11 @@ func TestUpdateLastTimeLogin(t *testing.T) {
 	success, err := pq.UpdateLastTimeLogin(user)
 	assert.True(t, success)
 	assert.Nil(t, err)
+
+	user.Password = ""
+	success, err = pq.UpdateLastTimeLogin(user)
+	assert.False(t, success)
+	assert.NotNil(t, err)
 }
 
 func TestUpdatePassword(t *testing.T) {
@@ -102,6 +130,11 @@ func TestUpdatePassword(t *testing.T) {
 	success, err := pq.UpdatePassword(user)
 	assert.True(t, success)
 	assert.Nil(t, err)
+
+	mock.ExpectPrepare("UPDATE member SET password").WillReturnError(errors.New("prepare error"))
+	success, err = pq.UpdatePassword(user)
+	assert.False(t, success)
+	assert.NotNil(t, err)
 }
 
 func TestDeleteAccount(t *testing.T) {
@@ -120,6 +153,11 @@ func TestDeleteAccount(t *testing.T) {
 	success, err := pq.DeleteAccount(user)
 	assert.True(t, success)
 	assert.Nil(t, err)
+
+	mock.ExpectPrepare("DELETE FROM member").WillReturnError(errors.New("prepare error"))
+	success, err = pq.DeleteAccount(user)
+	assert.False(t, success)
+	assert.NotNil(t, err)
 }
 
 func TestExistsID(t *testing.T) {
