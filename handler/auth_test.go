@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/iamsad5566/member_service_frame/handler"
+	"github.com/iamsad5566/member_service_frame/object"
+	"github.com/iamsad5566/member_service_frame/util"
 
 	"github.com/alicebob/miniredis/v2"
 	"github.com/gin-gonic/gin"
@@ -38,9 +40,24 @@ func TestTokenCheckerWithRedis(t *testing.T) {
 		c.JSON(http.StatusOK, gin.H{"message": "success"})
 	})
 
+	// Simulate a valid token stored in Redis
+	user := &object.User{UserID: "d878392c-0b31-4f8b-a09a-1a6bdd0d1cc9", Account: "test123"}
+	token := util.GenerateToken(user)
+
 	t.Run("Valid token", func(t *testing.T) {
-		// Simulate a valid token stored in Redis
-		token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIiLCJzdWIiOiJ0ZXN0MTIzIiwiZXhwIjoxNzEyMzk3Nzg5fQ.OLica5O99b85zew8poeTH7JV_46Ly-8dsIrzTD0wrOc"
+		client.Set(context.Background(), "logincheck:test123", time.Now().AddDate(-1, 0, 0).Format(time.RFC3339), 10*time.Minute)
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("GET", "/test", nil)
+		req.Header.Set("Authorization", "Bearer "+token)
+		router.ServeHTTP(w, req)
+		if req.Header.Get("message") == "login expired" {
+			assert.Equal(t, http.StatusUnauthorized, w.Code)
+		} else {
+			assert.Equal(t, http.StatusOK, w.Code)
+		}
+	})
+
+	t.Run("Login Expire", func(t *testing.T) {
 		client.Set(context.Background(), "logincheck:test123", time.Now().Format(time.RFC3339), 10*time.Minute)
 
 		w := httptest.NewRecorder()

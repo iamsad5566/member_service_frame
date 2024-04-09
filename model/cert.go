@@ -2,7 +2,6 @@ package model
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/iamsad5566/member_service_frame/config"
@@ -22,28 +21,28 @@ const (
 
 func CertifyToken(loginTimeRepo repo.LoginTimeInterface, ctx context.Context, token string) (int, string) {
 	id, account, err := util.CertificateToken(token)
+	valid, getLoginTimeErr := loginStillValid(loginTimeRepo, ctx, account)
+	if !valid && getLoginTimeErr == nil {
+		return LoginExpired, ""
+	}
+
 	if err != nil && err.Error() == jwt.ErrTokenExpired.Error() {
 		return TokenExpired, util.GenerateToken(object.NewUser(id, account))
 	} else if err != nil {
-		log.Println(err)
 		return WrongToken, ""
 	}
 
-	if !loginStillValid(loginTimeRepo, ctx, account) {
-		return LoginExpired, ""
-	}
 	return Pass, ""
 }
 
-func loginStillValid(loginTimeRepo repo.LoginTimeInterface, ctx context.Context, account string) bool {
+func loginStillValid(loginTimeRepo repo.LoginTimeInterface, ctx context.Context, account string) (bool, error) {
 	var lastTimeLogin, err = loginTimeRepo.GetLoginTime(ctx, account)
 	if err != nil {
-		log.Println(err)
-		return false
+		return false, err
 	}
 	var now time.Time = time.Now()
 	var duration time.Duration = now.Sub(lastTimeLogin)
-	return duration.Hours() < float64(config.Setting.GetValidLogin())*24.0
+	return duration.Hours() < float64(config.Setting.GetValidLogin())*24.0, nil
 }
 
 func CertifyOauthAccount(loginTimeRepo repo.LoginTimeInterface, ctx context.Context, account string) int {
