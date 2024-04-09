@@ -45,7 +45,7 @@ func TestTokenCheckerWithRedis(t *testing.T) {
 	token := util.GenerateToken(user)
 
 	t.Run("Valid token", func(t *testing.T) {
-		client.Set(context.Background(), "logincheck:test123", time.Now().AddDate(-1, 0, 0).Format(time.RFC3339), 10*time.Minute)
+		client.Set(context.Background(), "logincheck:test123", time.Now().Format(time.RFC3339), 10*time.Minute)
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("GET", "/test", nil)
 		req.Header.Set("Authorization", "Bearer "+token)
@@ -58,17 +58,13 @@ func TestTokenCheckerWithRedis(t *testing.T) {
 	})
 
 	t.Run("Login Expire", func(t *testing.T) {
-		client.Set(context.Background(), "logincheck:test123", time.Now().Format(time.RFC3339), 10*time.Minute)
+		client.Set(context.Background(), "logincheck:test123", time.Now().AddDate(-1, 0, 0).Format(time.RFC3339), 10*time.Minute)
 
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("GET", "/test", nil)
 		req.Header.Set("Authorization", "Bearer "+token)
 		router.ServeHTTP(w, req)
-		if req.Header.Get("message") == "login expired" {
-			assert.Equal(t, http.StatusUnauthorized, w.Code)
-		} else {
-			assert.Equal(t, http.StatusOK, w.Code)
-		}
+		assert.Equal(t, http.StatusUnauthorized, w.Code)
 	})
 
 	t.Run("Invalid token", func(t *testing.T) {
