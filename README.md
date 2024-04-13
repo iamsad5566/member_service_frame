@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/iamsad5566/member_service_frame/graph/badge.svg?token=NTFKVYJH4K)](https://codecov.io/gh/iamsad5566/member_service_frame)
 
-[中文版](/doc/README-zh.md) , [English](README.md)   
+[中文版](/README-zh.md) , [English](/README.md)   
 
 Member Service is an open-source microservice developed in Go that handles user authentication, registration, and login. It integrates various use cases and scenarios related to user management.
 

@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/iamsad5566/member_service_frame/graph/badge.svg?token=NTFKVYJH4K)](https://codecov.io/gh/iamsad5566/member_service_frame)
 
 
-[中文版](/doc/README-zh.md) , [English](../README.md)
+[中文版](/README-zh.md) , [English](/README.md)
 
 會員服務是一個使用Go語言開發的開源微服務，處理使用者驗證、註冊和登入等功能,整合了各種與使用者管理相關的使用案例和情況。
 
