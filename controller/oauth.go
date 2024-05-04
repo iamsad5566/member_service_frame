@@ -90,13 +90,28 @@ func oauth2RegisterCallbackHandler(provider string, userRepo repo.UserRepoInterf
 			Account:  userInfo.Email,
 			Password: "",
 		}
-		success, err := model.AccountRegister(userRepo, usr)
+
+		exists, err := model.CheckExistsID(userRepo, usr)
+
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Internal server error",
+				"content": err.Error(),
+			})
+			return
+		} else {
+			if exists {
+				ctx.JSON(http.StatusBadRequest, gin.H{
+					"message": "Bad request",
+					"content": "Account already exists",
+				})
+				return
+			}
+		}
+
+		_, err = model.AccountRegister(userRepo, usr)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error while registering user"})
-			return
-		}
-		if !success {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "User already exists"})
 			return
 		}
 		ctx.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
